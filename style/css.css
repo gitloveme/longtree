@@ -58,3 +58,7 @@ body{background-color:#547543;font-family:Microsoft YaHei;color:#fff;}
 .treedes h3{font-size:30px;font-family: "方正兰亭超细黑简体";line-height:35px;}
 .treedes p{font-size:14px;line-height: 24px;}
 .treedes .ico-ori{width:20px;height:24px;vertical-align: middle;display: inline-block;background-position:-265px -236px;margin-right:5px;}
+.window-detail{top:400px;}
+.close-window{font-size:20px;color:#fff;font-family:"Sim Sun"}
+.change-tree{}
+.change-box{position:relative;}
