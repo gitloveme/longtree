@@ -3,6 +3,12 @@ body,div,p,h1,h2,h3,span,em,ul,li,table,tr,td,th{padding:0;margin:0;}
 input{border:none 0; outline: none;background:none;}
 table,tr,td,th{border:none;border-collapse:collapse;}
 img{border:none}
+ul,li{list-style:none;}
+.fl{ float:left;}
+.fr{ float:right;}
+.clear:before,.clear:after{display:table;content:"";}
+.clear:after{ clear:both;}
+.clear{zoom:1;}
 body{background-color:#547543;font-family:Microsoft YaHei;color:#fff;}
 .icon{background-image:url(../images/icon.png);background-repeat:no-repeat;}
 .commonbox{height:600px;position:relative;margin:20px;}	
@@ -58,7 +64,29 @@ body{background-color:#547543;font-family:Microsoft YaHei;color:#fff;}
 .treedes h3{font-size:30px;font-family: "方正兰亭超细黑简体";line-height:35px;}
 .treedes p{font-size:14px;line-height: 24px;}
 .treedes .ico-ori{width:20px;height:24px;vertical-align: middle;display: inline-block;background-position:-265px -236px;margin-right:5px;}
-.window-detail{top:400px;}
-.close-window{font-size:20px;color:#fff;font-family:"Sim Sun"}
-.change-tree{}
-.change-box{position:relative;}
+.window-detail{top:400px;left:100px;width:760px;color:#808080;}
+.window-detail .treedes{background:none;right:30px;bottom:25px;}
+.window-detail .treeno{left:50px;top:18px;}
+.close-window{font-size:20px;color:#fff;font-family:"Sim Sun";left:700px;top:20px;position:absolute;z-index: 2;cursor:pointer;}
+.change-tree{background-color:#537343;position:relative;height:210px;padding-top:70px;}
+.change-box{position:relative;height:210px;margin:0 50px 0 70px;}
+.change-tree .arrow-left,.change-tree .arrow-right{position:absolute;width:40px;height:50px;top:160px;z-index:3;cursor:pointer;}
+.change-tree .arrow-left{background-position:-2px -417px;left:20px;}
+.change-tree .arrow-right{background-position:-40px -417px;left:448px;}
+.change-box img{border:1px solid #537343;position:absolute;}
+.change-box .curr-img{width:208px;height:208px;top:0;left:81px;z-index:2;}
+.change-box .pre-img,.change-box .next-img{width:185px;height:185px;top:23px;opacity:0.5;}
+.change-box .pre-img{left:0;}
+.change-box .next-img{left:185px;}
+.tree-intro{background-color:rgba(255,255,255,0.9);padding:30px 50px;max-height:440px; overflow:auto;}
+.tree-intro ul{margin-right:-20px;}
+.tree-intro li{width:220px;float:left;font-size:14px;line-height: 24px;}
+.tree-intro .tree-type{font-size:18px;text-align:center;line-height: 35px; display: -webkit-flex; display: flex;margin:10px 0;}
+.tree-intro .tree-type .tree-title{padding:0 5px;height:35px;line-height:35px;}
+.tree-intro .tree-type .before,.tree-intro .tree-type .after{background-image:url(../images/list-line.png);background-repeat:no-repeat;width:296px;height:35px;display:inline-block;}
+.tree-intro .tree-type .before{background-position:right top;}
+.tree-intro .tree-type .after{background-position:left bottom;}
+/*manage*/
+.manage-area{height:100%;position:relative;}
+.manage-navs{ display: -webkit-flex; display: flex;}
+.manage-navs li{float:left;flex: 1;width:240px;height:240px;margin-right:20px;background-color:#f00;}
