@@ -43,9 +43,9 @@ body{background-color:#547543;font-family:Microsoft YaHei;color:#fff;}
 #map{position:relative;width:100%;height:100%;}
 .form-search{width:600px;height:720px;position:absolute;top:60px;left:60px;}
 .bar-search{height:60px;background-color:rgba(255,255,255,0.9);margin-bottom:20px;}
-.bar-search input{font-size:14px;color:#5d7e60;line-height: 60px;padding-left: 10px;width:520px;}
+.bar-search input{font-size:14px;color:#5d7e60;line-height: 60px;padding-left: 10px;width:520px; display:-webkit-flex;display: flex;}
 .submit-search{width:60px;height:60px;float:right;background-color:#537343;background-position:-244px -102px;cursor:pointer;}
-.search-list table{ width:100%;text-align: left;color:#808080;}
+.search-list table{ width:100%;text-align: left;color:#808080;font-size:14px;}
 .search-list tr{line-height: 38px;}
 .search-list td:first-child,.search-list th:first-child{padding-left:20px;}
 .search-list th{background-color:#d3e8d5;color:#5d7e60;font-weight:normal;}
@@ -87,6 +87,32 @@ body{background-color:#547543;font-family:Microsoft YaHei;color:#fff;}
 .tree-intro .tree-type .before{background-position:right top;}
 .tree-intro .tree-type .after{background-position:left bottom;}
 /*manage*/
-.manage-area{height:100%;position:relative;}
-.manage-navs{ display: -webkit-flex; display: flex;}
-.manage-navs li{float:left;flex: 1;width:240px;height:240px;margin-right:20px;background-color:#f00;}
+.manage-area,.tongji-area{height:100%;position:relative;background-color:rgba(255,255,255,0.6);}
+.manage-navs,.tongji-navs{position:absolute;left:20px;top:50%;margin:-128px 0 0;}
+.manage-navs li{float:left;width:180px;height:180px;margin:15px 15px 0;}
+.manage-navs li img{width:100%;height:100%;}
+/*复壮*/
+.manage-pub{background-color: #ebf4ec;width:100%;height:100%;position: relative;}
+.manage-pub-title{background-color:#75af69;padding:30px 10px 0;height:205px;}
+.form-fz{width:600px;margin:65px 0 0 50px;}
+.manage-pub-title .bar-search{}
+.manage-pub-search{margin:-38px 1% 0;}
+.manage-pub-scroll{max-height:200px; overflow:auto;}
+.manage-pub-type{width:234px;height:168px;background-repeat:no-repeat;}
+.manage-pub-fz{background-image:url(../images/manage-t-fz.png)}
+.manage-pub-yh{background-image:url(../images/manage-t-yh.png)}
+.manage-pub-xc{background-image:url(../images/manage-t-xc.png)}
+.manage-pub-btns{position:absolute;top:95px;right:1%;}
+.manage-pub-btns span{width:60px;height:60px;display:inline-block;margin:0 5px;cursor:pointer;}
+.manage-pub-btns .manage-btn-add{background-position:-99px -411px;}
+.manage-pub-btns .manage-btn-edit{background-position:-169px -411px;}
+.manage-pub-btns .manage-btn-del{background-position:-239px -411px;}
+.ico-fzq{width:24px;height:23px;display:inline-block;background-position:-306px -411px; vertical-align:middle;}
+.ico-fzh{width:24px;height:23px;background-position:-306px -446px;vertical-align:middle;display:inline-block;}
+.padleft{padding-left:3%;}
+.padright{padding-right:1%;}
+/*tongji*/
+.tongji-area{}
+.tongji-navs{}
+.tongji-navs li{float:left;width:240px;height:180px;margin:15px 15px 0;}
+.tongji-navs li img{width:100%;}
