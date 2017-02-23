@@ -4,20 +4,24 @@
 <meta charset="utf-8">
 <title>昌平区园林绿化局古树名木管理系统</title>
 <link href="style/css.css" rel="stylesheet">
-<style>
-
-</style>
 </head>
 <body>
+<div id="loading">
+    <div class="spinner">
+    <div class="bounce1"></div>
+    <div class="bounce2"></div>
+    <div class="bounce3"></div>
+    </div>
+</div>
 <div class="commonbox" setwidth="1600" setheight="850" setmargin="-425px 0 0 -800px">
 	<div class="nav">
 		<ul>
-			<li class="nav-login icon ">
+			<li class="nav-login icon" link="index.html">
 				<div class="icon nav-logon"></div>
 			</li>
-			<li class="nav-search icon" title="查询"></li>
-			<li class="nav-manage icon active" title="管理"></li>
-			<li class="nav-stat icon" title="统计"></li>
+			<li class="nav-search icon" title="查询" link="search.html"></li>
+			<li class="nav-manage icon active" title="管理" link="manage.html"></li>
+			<li class="nav-stat icon" title="统计" link="tongji.html"></li>
 		</ul>
 	</div>
 	<div class="showbox">
@@ -135,5 +139,7 @@
 		</div>
 	</div>
 </div>
+<script src="js/jquery.js"></script>
+<script src="js/common.js"></script>
 </body>
 </html>
