@@ -5,7 +5,7 @@
 <title>昌平区园林绿化局古树名木管理系统</title>
 <link href="style/css.css" rel="stylesheet">
 </head>
-<body>
+<body resizeType="tjdetail">
 <div id="loading">
     <div class="spinner">
     <div class="bounce1"></div>
@@ -33,16 +33,16 @@
 				<div class="tj-tit">各行政区域古树分布情况</div>
 				<div class="tj-maparea">
 					<div id="tjmap">
-						<img src="images/tj-map.png" />
+						<!-- <img src="images/tj-map.png" /> -->
 					</div>
 					<div class="tj-arrow">
 						<div class="arrow-left icon"></div>
 						<div class="arrow-right icon"></div>
 					</div>
 					<ul class="tj-map-type">
-						<li title="饼状统计图" class="icon tj-type-a"></li>
-						<li title="折线统计图" class="icon tj-type-b"></li>
-						<li title="柱状统计图" class="icon tj-type-c"></li>
+						<li title="饼状统计图" class="icon tj-type-a" kind="pie"></li>
+						<li title="折线统计图" class="icon tj-type-b" kind="line"></li>
+						<li title="柱状统计图" class="icon tj-type-c active" kind="bar"></li>
 					</ul>
 				</div>
 			</div>
@@ -51,5 +51,7 @@
 </div>
 <script src="js/jquery.js"></script>
 <script src="js/common.js"></script>
+<script src="http://echarts.baidu.com/build/dist/echarts.js"></script>
+<script src="js/chart.js"></script>
 </body>
 </html>

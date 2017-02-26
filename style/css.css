@@ -64,7 +64,7 @@ body{background-color:#547543;font-family:Microsoft YaHei;color:#fff; overflow-y
 .search-list tr:nth-child(odd){background-color:#eef5ef;}
 .search-list tr.active,.search-list tr:hover{color:#75af69;}
 .arrow-s{width:16px;height:16px;display: inline-block;vertical-align: middle;background-position:-263px -190px;}
-.window{position:absolute;width:400px;height:310px; background-color:#537343;left:550px;top:50px;z-index:9;}
+.window{position:absolute;width:400px;height:310px; background-color:#537343;left:550px;top:50px;z-index:9;display: none;}
 .treeimg{width:100%;height:265px;}
 .btn-more{text-align: center;line-height: 40px;}
 .btn-more a{color:#cbffd0;font-size:16px;}
@@ -101,9 +101,15 @@ body{background-color:#547543;font-family:Microsoft YaHei;color:#fff; overflow-y
 .tree-intro .tree-type .after{background-position:left bottom;}
 /*manage*/
 .manage-area,.tongji-area{height:100%;position:relative;background-color:rgba(255,255,255,0.6);}
-.manage-navs,.tongji-navs{position:absolute;left:20px;top:50%;margin:-128px 0 0;}
-.manage-navs li{float:left;width:180px;height:180px;margin:15px 15px 0;}
-.manage-navs li img{width:100%;height:100%;}
+.manage-navs,.tongji-navs{position:absolute;left:6%;top:50%;margin:-120px 0 0;}
+.manage-navs li{float:left;width:240px;height:240px;margin:0 1.2% 1.2% 0;}
+.manage-navs li a,.tongji-navs li a{width:100%;height:100%;display:block;background-repeat:no-repeat;background-size:cover;}
+.manage-navs .manage-nav-rejuvenation a{background-image:url(../images/manage-nav-1.png);}
+.manage-navs .manage-nav-upkeep a{background-image:url(../images/manage-nav-2.png);}
+.manage-navs .manage-nav-patrol a{background-image:url(../images/manage-nav-3.png);}
+.manage-navs .manage-nav-add a{background-image:url(../images/manage-nav-4.png);}
+.manage-navs .manage-nav-die a{background-image:url(../images/manage-nav-5.png);}
+.manage-navs li a:hover{background-position:left bottom;}
 /*复壮*/
 .manage-pub{background-color: #ebf4ec;width:100%;height:100%;position: relative;}
 .manage-pub-title{background-color:#75af69;padding:30px 10px 0;height:205px;}
@@ -126,8 +132,13 @@ body{background-color:#547543;font-family:Microsoft YaHei;color:#fff; overflow-y
 .padright{padding-right:1%;}
 /*tongji*/
 .tongji-navs{}
-.tongji-navs li{float:left;width:240px;height:180px;margin:15px 15px 0;}
-.tongji-navs li img{width:100%;}
+.tongji-navs li{float:left;width:300px;height:240px;margin:0 1.2% 1.2% 0;}
+
+.tongji-navs .tongji-nav-1 a{background-image:url(../images/tongji-nav-1.png);}
+.tongji-navs .tongji-nav-2 a{background-image:url(../images/tongji-nav-2.png);}
+.tongji-navs .tongji-nav-3 a{background-image:url(../images/tongji-nav-3.png);}
+.tongji-navs .tongji-nav-4 a{background-image:url(../images/tongji-nav-4.png);}
+.tongji-navs li a:hover{background-position:left bottom;}
 .tongji-pub{background-color: #ebf4ec;width:100%;height:100%;}
 .tj-pub-title{background-color:#75af69;padding:30px 10px 0;height:205px;}
 .tj-tit-img{width:352px;height:185px;background-repeat:no-repeat;}
@@ -135,7 +146,7 @@ body{background-color:#547543;font-family:Microsoft YaHei;color:#fff; overflow-y
 .tj-map{margin:-40px 5% 0;background-color:#fff;height:390px;}
 .tj-map .tj-tit{line-height:40px;height:40px;padding:0 1%;color:#5d7e60;font-size:14px;background-color:#d3e8d5;}
 .tj-maparea{margin-top:5%;position:relative; z-index:3;}
-#tjmap{width:82%;position:relative; text-align:center;margin-left:6%;}
+#tjmap{width:82%;min-height:300px;position:relative; text-align:center;margin-left:6%;}
 #tjmap img{max-width: 100%;}
 .tj-map .arrow-left{top:50%;left:2%;margin-top:-25px;}
 .tj-map .arrow-right{top:50%;left:82.5%;margin-top:-25px;}
@@ -144,3 +155,6 @@ body{background-color:#547543;font-family:Microsoft YaHei;color:#fff; overflow-y
 .tj-map-type .tj-type-a{background-position: 0 -484px;}
 .tj-map-type .tj-type-b{background-position:-70px -484px;}
 .tj-map-type .tj-type-c{background-position:-140px -484px;}
+.tj-map-type .tj-type-a.active,.tj-map-type .tj-type-a:hover{background-position: 0 -547px;}
+.tj-map-type .tj-type-b.active,.tj-map-type .tj-type-b:hover{background-position:-70px -547px;}
+.tj-map-type .tj-type-c.active,.tj-map-type .tj-type-c:hover{background-position:-140px -547px;}
