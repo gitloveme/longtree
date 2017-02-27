@@ -32,7 +32,7 @@ function getBoundary(){
     var bdary = new BMap.Boundary();
     var name = document.getElementById("districtName").value;
     bdary.get(name, function(rs){       //获取行政区域
-		map.removeOverlay(overlayOffice);
+		/*map.removeOverlay(overlayOffice);
 		var arry=rs.boundaries[0].split(";");
 		var len=arry.length;
 		var polygon=[];
@@ -40,17 +40,18 @@ function getBoundary(){
 			polygon.push(new BMap.Point(arry[i].split(",")[0],arry[i].split(",")[1]));
 		}
 		overlayOffice = new BMap.Polyline(polygon,{strokeColor:"red", strokeWeight:2, strokeOpacity:1});
-		map.addOverlay(overlayOffice);
+		map.addOverlay(overlayOffice);*/
 		//var index=len-1;
 		//map.setViewport(arry[index].split(",")[0],arry[index].split(",")[1]);
-        /*//map.clearOverlays();        //清除地图覆盖物       
+        //map.clearOverlays();        //清除地图覆盖物       
         var count = rs.boundaries.length; //行政区域的点有多少个
         for(var i = 0; i < count; i++){
             var ply = new BMap.Polygon(rs.boundaries[i], {strokeWeight: 2, strokeColor: "red",fillColor:"none"}); //建立多边形覆盖物
             map.addOverlay(ply);  //添加覆盖物
+            console.log(ply.getPath())
             map.setViewport(ply.getPath());    //调整视野         
 			//map.disableMassClear();
-        } */               
+        }                
     });
 }
 	addMapOverlay();
@@ -92,10 +93,10 @@ var bianjie="115.883057, 40.151437;115.887284, 40.147657;115.907548, 40.14707;11
 			
 			console.log("***************");
 			var div = document.createElement("div");
-			var x=data.pixel.x+30;
+			var x=data.pixel.x;
 			var y=data.pixel.y;
 			div.setAttribute("style",'top:'+y+'px;left:'+x+'px;width:10px;height:10px;background-color:#f00;opacity:0.5;z-index:5;position:absolute;');
-			document.getElementsByTagName("body")[0].appendChild(div)
+			document.getElementById("container").appendChild(div)
 			//div.style.cssText='top:'+data.pixel.y+'px";left:'+data.pixel.x+'"px";width:10px;height:10px;background-color:#f00;opacity:0.5;z-index:5;position:absoult;';
 			
 			
