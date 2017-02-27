@@ -53,8 +53,5 @@ $(function (){
         setWidnowSize();
         hideLoading();
     }
-    $(window).resize(function (){
-        setWidnowSize();
-    });
     init();
 });

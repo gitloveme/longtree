@@ -101,7 +101,7 @@ body{background-color:#547543;font-family:Microsoft YaHei;color:#fff; overflow-y
 .tree-intro .tree-type .after{background-position:left bottom;}
 /*manage*/
 .manage-area,.tongji-area{height:100%;position:relative;background-color:rgba(255,255,255,0.6);}
-.manage-navs,.tongji-navs{position:absolute;left:6%;top:50%;margin:-120px 0 0;}
+.manage-navs,.tongji-navs{position:absolute;left:6%;top:50%;margin:-120px 0 0;width:100%;}
 .manage-navs li{float:left;width:240px;height:240px;margin:0 1.2% 1.2% 0;}
 .manage-navs li a,.tongji-navs li a{width:100%;height:100%;display:block;background-repeat:no-repeat;background-size:cover;}
 .manage-navs .manage-nav-rejuvenation a{background-image:url(../images/manage-nav-1.png);}
