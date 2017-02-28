@@ -71,7 +71,7 @@ function addTreeWms(){
 		bbox=lb.lng+","+lb.lat+","+rt.lng+","+rt.lat;
 	
 		var url ="http://101.200.104.160:80/geoserver/gsmm/wms?service=WMS&version=1.1.0&request=GetMap&layers=gsmm:gsmm2014_pt&STYLES=&TRANSPARENT=true&FORMAT=image/png&VERSION=1.1.1&srs=EPSG:4326&BBOX="+bbox+"&WIDTH=265&HEIGHT=265";
-		return url;  //根据当前坐标，选取合适的瓦片图
+    return url;  //根据当前坐标，选取合适的瓦片图
 	};
 	map.addTileLayer(treeLayer);
 }

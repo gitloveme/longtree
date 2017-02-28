@@ -52,16 +52,25 @@ body{background-color:#547543;font-family:Microsoft YaHei;color:#fff; overflow-y
 /*search*/
 .search-area{width:100%;height:100%;position:relative;}
 #map{position:relative;width:100%;height:100%;z-index: 2;}
-.search-tool{position:absolute;width:60px;height:120px;right:10px;top:50%;margin-top:-60px;background-color:rgba(0,0,0,0.8);}
-.search-tool li{color:#fff;font-size:14px;line-height:20px;text-align:center;cursor:pointer;margin-bottom:5px;}
-.search-tool li:hover{background-color:#000;}
+.search-tool{position:absolute;background-image: url(../images/tool/bg.png); background-repeat: no-repeat; width: 20px; height: 180px;padding:0 8px 0 12px;top:50%;right:0;margin-top:-90px;}
+.search-tool li{width: 20px; height: 20px;cursor:pointer;margin-top:8px;background-repeat:no-repeat;}
+.search-tool .tool-move{background-image:url(../images/tool/move.png);}
+.search-tool .tool-big{background-image:url(../images/tool/big.png);}
+.search-tool .tool-small{background-image:url(../images/tool/small.png);}
+.search-tool .tool-lang{background-image:url(../images/tool/ceju.png);}
+.search-tool .tool-area{background-image:url(../images/tool/area.png);}
+.search-tool .tool-clear{background-image:url(../images/tool/clear.png);}
 .form-search{width:600px;position:absolute;top:60px;left:60px;}
 .bar-search{height:60px;background-color:rgba(255,255,255,0.9);margin-bottom:20px;}
 .bar-search input{font-size:14px;color:#5d7e60;line-height: 60px;padding-left: 10px;width:520px; display:-webkit-flex;display: flex;}
 .submit-search{width:60px;height:60px;float:right;background-color:#537343;background-position:-244px -102px;cursor:pointer;}
+.search-list{position:relative;padding-top:38px;}
+.search-list .copytable{position:absolute;left:0;top:0;height:38px;overflow:hidden;width:100%;}
+.search-list .autoscroll{position:relative;max-height:300px;overflow:auto;}
+.search-list .copytable tr:first-child th:last-child{padding-right:3px;}
 .search-list table{ width:100%;text-align: left;color:#808080;font-size:14px;}
 .search-list tr{line-height: 38px;}
-.search-list td:first-child,.search-list th:first-child{padding-left:20px;}
+.search-list td:first-child,.search-list td:last-child,.search-list th:first-child,.search-list th:last-child{padding:0 3%;}
 .search-list th{background-color:#d3e8d5;color:#5d7e60;font-weight:normal;}
 .search-list tr:nth-child(even){background-color:#fefefe;}
 .search-list tr:nth-child(odd){background-color:#eef5ef;}
@@ -118,7 +127,7 @@ body{background-color:#547543;font-family:Microsoft YaHei;color:#fff; overflow-y
 .manage-pub-title{background-color:#75af69;padding:30px 10px 0;height:205px;}
 .form-fz{width:600px;margin:65px 0 0 50px;}
 .manage-pub-title .bar-search{}
-.manage-pub-search{margin:-38px 1% 0;}
+.manage-pub-search{margin:-38px 3% 0;}
 .manage-pub-scroll{max-height:200px; overflow:auto;}
 .manage-pub-type{width:234px;height:168px;background-repeat:no-repeat;}
 .manage-pub-fz{background-image:url(../images/manage-t-fz.png)}
@@ -131,8 +140,6 @@ body{background-color:#547543;font-family:Microsoft YaHei;color:#fff; overflow-y
 .manage-pub-btns .manage-btn-del{background-position:-239px -411px;}
 .ico-fzq{width:24px;height:23px;display:inline-block;background-position:-306px -411px; vertical-align:middle;}
 .ico-fzh{width:24px;height:23px;background-position:-306px -446px;vertical-align:middle;display:inline-block;}
-.padleft{padding-left:3%;}
-.padright{padding-right:1%;}
 /*tongji*/
 .tongji-navs{}
 .tongji-navs li{float:left;width:300px;height:240px;margin:0 1.2% 1.2% 0;}
@@ -146,7 +153,7 @@ body{background-color:#547543;font-family:Microsoft YaHei;color:#fff; overflow-y
 .tj-pub-title{background-color:#75af69;padding:30px 10px 0;height:205px;}
 .tj-tit-img{width:352px;height:185px;background-repeat:no-repeat;}
 .tj-tit-xzqq{background-image:url(../images/tj-tit-qyfb.png);}
-.tj-map{margin:-40px 5% 0;background-color:#fff;height:390px;}
+.tj-map{margin:-40px 6.6% 0;background-color:#fff;height:390px;}
 .tj-map .tj-tit{line-height:40px;height:40px;padding:0 1%;color:#5d7e60;font-size:14px;background-color:#d3e8d5;}
 .tj-maparea{margin-top:5%;position:relative; z-index:3;}
 #tjmap{width:82%;min-height:300px;position:relative; text-align:center;margin-left:6%;}
@@ -161,3 +168,23 @@ body{background-color:#547543;font-family:Microsoft YaHei;color:#fff; overflow-y
 .tj-map-type .tj-type-a.active,.tj-map-type .tj-type-a:hover{background-position: 0 -547px;}
 .tj-map-type .tj-type-b.active,.tj-map-type .tj-type-b:hover{background-position:-70px -547px;}
 .tj-map-type .tj-type-c.active,.tj-map-type .tj-type-c:hover{background-position:-140px -547px;}
+/*定义滚动条宽高及背景，宽高分别对应横竖滚动条的尺寸*/
+.autoscroll::-webkit-scrollbar{
+    width: 5px;
+    height: 10px;
+    background-color: #c1dcb9;
+}
+/*定义滚动条的轨道，内阴影及圆角*/
+.autoscroll::-webkit-scrollbar-track{
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+    border-radius: 10px;
+    background-color: #c1dcb9;
+}
+/*定义滑块，内阴影及圆角*/
+.autoscroll::-webkit-scrollbar-thumb{
+    /*width: 10px;*/
+    height: 20px;
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+    background-color: #75af69;
+}
