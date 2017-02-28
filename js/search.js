@@ -11,7 +11,46 @@ map.setCurrentCity("北京"); // 设置地图显示的城市 此项是必须设�
 var stCtrl = new BMap.PanoramaControl(); // 构造全景控件
 stCtrl.setOffset(new BMap.Size(10, 35));
 map.addControl(stCtrl);// 添加全景控件 
+var myDistance = new BMapLib.DistanceTool(map);//测距
+/*工具开关*/
+/*
+<li title="移动地图" onclick="moveMap()">移动</li>
+<li title="放大" onclick="mapZoomUp()">放大</li>
+<li title="缩小" onclick="mapZoomDown()">缩小</li>
+<li title="测距" onclick="openDistance()">测距</li>
+<li title="测面积" onclick="getAcreage()">测面积</li>
 
+ */
+function openDistance(){
+    myDistance.open();
+}
+function getAcreage(){//测面积
+    var styleOptions = {
+        strokeColor:"green",    //边线颜色。
+        fillColor:"green",      //填充颜色。当参数为空时，圆形将没有填充效果。
+        strokeWeight: 3,       //边线的宽度，以像素为单位。
+        strokeOpacity: 0.8,    //边线透明度，取值范围0 - 1。
+        fillOpacity: 0.6,      //填充的透明度，取值范围0 - 1。
+        strokeStyle: 'solid' //边线的样式，solid或dashed。
+    }
+    var drawingManager = new BMapLib.DrawingManager(map, {
+        isOpen: true,//是否开启绘制模式     
+        drawingToolOptions: {
+        anchor: BMAP_ANCHOR_TOP_RIGHT, //位置
+        offset: new BMap.Size(5, 5) //偏离值
+
+        },
+        enableCalculate:true,//面积
+        polygonOptions: styleOptions //多边形的样式
+    });
+    drawingManager.setDrawingMode(BMAP_DRAWING_POLYGON);//画图模板
+    drawingManager.addEventListener("polygoncomplete", function(e) {
+        //myDrag.close();
+        //myDragflag=0;
+        //var area = BMapLib.GeoUtils.getPolygonArea(e.getPath());
+        //alert("共" + ForDight(parseInt(area.toFixed(2))/1000000,3) + "平方公里");
+    });
+}
 /*绘制行政区域*/
 var overlayOffice;
 function getBoundary(name){

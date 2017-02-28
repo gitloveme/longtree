@@ -52,7 +52,10 @@ body{background-color:#547543;font-family:Microsoft YaHei;color:#fff; overflow-y
 /*search*/
 .search-area{width:100%;height:100%;position:relative;}
 #map{position:relative;width:100%;height:100%;z-index: 2;}
-.form-search{width:600px;height:720px;position:absolute;top:60px;left:60px;}
+.search-tool{position:absolute;width:60px;height:120px;right:10px;top:50%;margin-top:-60px;background-color:rgba(0,0,0,0.8);}
+.search-tool li{color:#fff;font-size:14px;line-height:20px;text-align:center;cursor:pointer;margin-bottom:5px;}
+.search-tool li:hover{background-color:#000;}
+.form-search{width:600px;position:absolute;top:60px;left:60px;}
 .bar-search{height:60px;background-color:rgba(255,255,255,0.9);margin-bottom:20px;}
 .bar-search input{font-size:14px;color:#5d7e60;line-height: 60px;padding-left: 10px;width:520px; display:-webkit-flex;display: flex;}
 .submit-search{width:60px;height:60px;float:right;background-color:#537343;background-position:-244px -102px;cursor:pointer;}

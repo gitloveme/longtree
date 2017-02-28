@@ -7,7 +7,10 @@
 <title>昌平区园林绿化局古树名木管理系统</title>
 <link href="style/css.css" rel="stylesheet">
 <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=d5H68m2aYgtKDN3eTiryGcwz"></script>
-
+<!--加载鼠标测距工具-->
+<script type="text/javascript" src="http://api.map.baidu.com/library/DistanceTool/1.2/src/DistanceTool_min.js"></script>
+<!--加载鼠标绘制工具-->
+<script type="text/javascript" src="http://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.js"></script>
 </head>
 <body>
 <div id="loading">
@@ -31,6 +34,34 @@
 	<div class="showbox">
 		<div class="search-area">
 			<div id="map"></div>
+			<div class="search-tool">
+				<!--
+			<div
+			style="margin: 0 auto; background-image: url('./images/image/toolbg.png'); background-repeat: no-repeat; width: 40px; height: 179px; position: absolute; top: 250px; right: -3px; cursor: pointer;">
+			<div class="mapFuGN" onclick="movemap()" title="平移"
+				style="background-image: url('./images/image/toolremove.png'); background-repeat: no-repeat; width: 20px; height: 20px; margin-left: 6px; cursor: pointer; margin-top: 10px; "></div>
+			<div class="mapFuGN" onclick="amplification()" title="放大"
+				style="background-image: url('./images/image/toolfangda.png'); background-repeat: no-repeat; width: 20px; height: 20px; margin-left: 6px; cursor: pointer; margin-top: 8px;"></div>
+			<div class="mapFuGN" onclick="narrow()" title="缩小"
+				style="background-image: url('./images/image/toolsuoxiao.png'); background-repeat: no-repeat; width: 20px; height: 20px; margin-left: 6px; cursor: pointer; margin-top: 8px;"></div>
+			<div class="mapFuGN" onclick="distance()"
+				title="测距"
+				style="background-image: url('./images/image/toolceju.png'); background-repeat: no-repeat; width: 20px; height: 20px; margin-left: 9px; cursor: pointer; margin-top: 8px;"></div>
+			<div class="mapFuGN" onclick="calculate()" title="测面积"
+				style="background-image: url('./images/image/toolcemian.png'); background-repeat: no-repeat; width: 20px; height: 20px; margin-left: 6px; cursor: pointer; margin-top: 8px;"></div>
+			<div class="mapFuGN" onclick="allClear()" title="清除"
+				style="background-image: url('./images/image/clear.png'); background-repeat: no-repeat; width: 20px; height: 20px; margin-left: 6px; cursor: pointer; margin-top: 8px;"></div>
+		</div>
+
+				-->
+				<ul>
+					<li title="移动地图" onclick="moveMap()">移动</li>
+					<li title="放大" onclick="mapZoomUp()">放大</li>
+					<li title="缩小" onclick="mapZoomDown()">缩小</li>
+					<li title="测距" onclick="openDistance()">测距</li>
+					<li title="测面积" onclick="getAcreage()">测面积</li>
+				</ul>
+			</div>
 			<div class="form-search">
 				<div class="bar-search">
 					<div class="icon submit-search"></div>
