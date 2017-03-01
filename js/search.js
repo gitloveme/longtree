@@ -81,9 +81,14 @@ function getAcreage(){
 }
 
 //清理覆盖物
+var allowClearoverlay=[];
 function clearToolPloy(){
-    map.clearOverlays();
-    addOverlayTree(confine);
+    console.log("clearOverlays:",allowClearoverlay)
+    //map.clearOverlays();
+    //addOverlayTree(confine);
+    for(var i=0;i<allowClearoverlay.length;i++){
+        map.removeOverlay(allowClearoverlay[i]);
+    }
     moveMap();
 }
 

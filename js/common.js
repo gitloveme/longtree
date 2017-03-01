@@ -34,9 +34,13 @@ $(function (){
                     var w=commonDom.find(".showbox").width()*0.832/4;
                     commonDom.find(".tongji-navs").css({"margin-top":-w/2,width:5*w}).find("li").css({width:w,height:0.8*w});
                 break;
-                case "manage":
+                case "manage"://管理
                     var w=commonDom.find(".showbox").width()*0.832/5;
                     commonDom.find(".manage-navs").css({"margin-top":-w/2,width:6*w}).find("li").css({width:w,height:w});
+                break;
+                case "managelist"://
+                    var maxh=commonDom.find(".showbox").height()*(1-0.07)-235;
+                    commonDom.find(".autoscroll").css("max-height",maxh)
                 break;
             }
         }        

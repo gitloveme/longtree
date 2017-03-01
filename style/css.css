@@ -66,7 +66,7 @@ body{background-color:#547543;font-family:Microsoft YaHei;color:#fff; overflow-y
 .submit-search{width:60px;height:60px;float:right;background-color:#537343;background-position:-244px -102px;cursor:pointer;}
 .search-list{position:relative;padding-top:38px;}
 .search-list .copytable{position:absolute;left:0;top:0;height:38px;overflow:hidden;width:100%;}
-.search-list .autoscroll{position:relative;max-height:300px;overflow:auto;}
+.search-list .autoscroll{position:relative;max-height:380px;overflow:auto;}
 .search-list .copytable tr:first-child th:last-child{padding-right:3px;}
 .search-list table{ width:100%;text-align: left;color:#808080;font-size:14px;}
 .search-list tr{line-height: 38px;}
@@ -133,6 +133,8 @@ body{background-color:#547543;font-family:Microsoft YaHei;color:#fff; overflow-y
 .manage-pub-fz{background-image:url(../images/manage-t-fz.png)}
 .manage-pub-yh{background-image:url(../images/manage-t-yh.png)}
 .manage-pub-xc{background-image:url(../images/manage-t-xc.png)}
+.manage-pub-add{background-image:url(../images/manage-t-add.png)}
+.manage-pub-die{background-image:url(../images/manage-t-die.png)}
 .manage-pub-btns{position:absolute;top:95px;right:1%;}
 .manage-pub-btns span{width:60px;height:60px;display:inline-block;margin:0 5px;cursor:pointer;}
 .manage-pub-btns .manage-btn-add{background-position:-99px -411px;}
@@ -152,7 +154,10 @@ body{background-color:#547543;font-family:Microsoft YaHei;color:#fff; overflow-y
 .tongji-pub{background-color: #ebf4ec;width:100%;height:100%;}
 .tj-pub-title{background-color:#75af69;padding:30px 10px 0;height:205px;}
 .tj-tit-img{width:352px;height:185px;background-repeat:no-repeat;}
-.tj-tit-xzqq{background-image:url(../images/tj-tit-qyfb.png);}
+.tj-tit-gsdj{background-image:url(../images/tj-tit-gsdj.png);}
+.tj-tit-gszs{background-image:url(../images/tj-tit-gszs.png);}
+.tj-tit-szbl{background-image:url(../images/tj-tit-szbl.png);}
+.tj-tit-qyfb{background-image:url(../images/tj-tit-qyfb.png);}
 .tj-map{margin:-40px 6.6% 0;background-color:#fff;height:390px;}
 .tj-map .tj-tit{line-height:40px;height:40px;padding:0 1%;color:#5d7e60;font-size:14px;background-color:#d3e8d5;}
 .tj-maparea{margin-top:5%;position:relative; z-index:3;}
