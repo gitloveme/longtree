@@ -141,67 +141,62 @@ function addTreeTileLayer(){
     };      
     map.addTileLayer(treeLayer);
 }
-function addOverlayTree(){
-    $.ajax({
-        type:"get",
-        url:"/inf/getLocation",
-        data:{},
-        dataType:"json",
-        error:function (error){console.error("获取位置信息出错")},
-        success:function (data){
-            var baiduData=data.data;
-            var sentString='';
-            for(var i=0;i<baiduData.length;i++){
-                if(i==baiduData.length-1){
-                    sentString+=baiduData[i].X+","+baiduData[i].Y;
-                }else{
-                    sentString+=baiduData[i].X+","+baiduData[i].Y+";";
-                }
-                
-            }
-            $.ajax({
-                type:"get",
-                url:"http://api.map.baidu.com/geoconv/v1/",
-                data:{coords:sentString,ak:"2lekLZRu8XcblvoAMksUK3qmGnISyCSP"},
-                dataType:"jsonp",
-                success:function (bddata){
-                    if(bddata.status !=0) return false;
-                    var arry=bddata.result;    
-                    if(arry.length==0) return false;
-                    console.log("百度：",arry)
-                    var myIcon = new BMap.Icon("http://123.56.168.10/images/tree3.png", new BMap.Size(24,24));
-                    for(var i=0;i<arry.length;i++){
-                        var point = new BMap.Point(arry[i].x,arry[i].y);
-                        var marker = new BMap.Marker(point,{icon:myIcon});
-                        map.addOverlay(marker);
-                        ////
-                        var sContent ='<div class="window">'+
-                                '<img src="/images/tree-des-1.jpg" class="treeimg" alt="油松">'+
-                                '<div class="btn-more">'+
-                                    '<em class="icon ico-eye"></em><a>查看详情</a>'+
-                                '</div>'+
-                                '<div class="icon ico-arrow"></div>'+
-                                '<p class="treeno">NO.110221000590</p>'+
-                                '<div class="treedes">'+
-                                    '<h3>油松</h3>'+
-                                    '<p class="des-en">Pinus tabuliformis Carrière</p>'+
-                                    '<p class="des-cn"><em class="icon ico-ori"></em>沙河镇G6高速路以东运河沿岸</p>'+
-                                '</div>'+
-                            '</div>';
-                        var infoWindow = new BMap.InfoWindow(sContent);  // 创建信息窗口对象
-                        marker.addEventListener("click", function(data){
-                            console.log(data);        
-                           this.openInfoWindow(infoWindow);
-                        });
-
-                        
-                    }
-                }
-            })
-
+function addOverlayTree(bianjie){
+    
+    //map.clearOverlays();
+    //map.removeOverlay()
+    
+    var arry=bianjie.split(";");    
+    var pointObj=[];    
+    var random=Math.ceil(Math.random()*4);
+    var myIcon = new BMap.Icon("http://123.56.168.10/images/tree"+random+".png", new BMap.Size(24,24));
+    for(var i=0;i<arry.length;i++){
+        if(i%9==0){//测试，正式数据时需去掉
+            var obj={x:arry[i].split(",")[0],y:arry[i].split(",")[1]};
+            pointObj.push(obj);
+        }
+        
+    }
+    
+    for (var m = 0; m < pointObj.length; m++){
+        var point = new BMap.Point(pointObj[m].x,pointObj[m].y);
+        var marker = new BMap.Marker(point,{icon:myIcon});
+        map.addOverlay(marker);
+        ////
+        /*var sContent ='<div class="window">'+
+                '<img src="images/tree-des-1.jpg" class="treeimg" alt="油松">'+
+                '<div class="btn-more">'+
+                    '<em class="icon ico-eye"></em><a>查看详情</a>'+
+                '</div>'+
+                '<div class="icon ico-arrow"></div>'+
+                '<p class="treeno">NO.110221000590</p>'+
+                '<div class="treedes">'+
+                    '<h3>油松</h3>'+
+                    '<p class="des-en">Pinus tabuliformis Carrière</p>'+
+                    '<p class="des-cn"><em class="icon ico-ori"></em>沙河镇G6高速路以东运河沿岸</p>'+
+                '</div>'+
+            '</div>';
+        var infoWindow = new BMap.InfoWindow(sContent);  // 创建信息窗口对象
+        marker.addEventListener("click", function(){          
+           this.openInfoWindow(infoWindow);
+           //图片加载完毕重绘infowindow
+           document.getElementById('imgDemo').onload = function (){
+               infoWindow.redraw();   //防止在网速较慢，图片未加载时，生成的信息框高度比图片的总高度小，导致图片部分被隐藏
+           }
+        });*/
+        /////
+        marker.onclick = function (data){
+            console.log(data);
+            console.log(data.point);//
+            console.log(data.screenX+"\n"+data.screenY);
+            console.log(data.pixel.x+"\n"+data.pixel.y);
+            
+            var x=data.pixel.x-data.offsetX;
+            var y=data.pixel.y-data.offsetY;
+            $("#map").siblings(".window").eq(0).css({top:y,left:x}).show();
             
         }
-    });    
+    }
     
 }
 //打开窗口
@@ -230,7 +225,7 @@ var confine="115.883057, 40.151437;115.887284, 40.147657;115.907548, 40.14707;11
 function init(){
     getBoundary("昌平区");
     //addTreeTileLayer();
-    addOverlayTree();
+    addOverlayTree(confine);
 }
 init();
 /*

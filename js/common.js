@@ -49,6 +49,7 @@ $(function (){
             document.body.removeChild(loadDom);
         },500);
     }
+    window.onresize= setWidnowSize;
     function init(){
         setWidnowSize();
         hideLoading();
