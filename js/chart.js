@@ -172,27 +172,88 @@ $(function (){
                     }
                 ]
             };
-            $(".tj-map-type").find("li").click(function (){
-                var that = $(this);
-                if(that.hasClass("active")) return false;
-                that.addClass("active").siblings().removeClass("active");
-                var kind=that.attr("kind");
-                if(kind=="pie"){
-                    loadChart(pieOption);
-                }else if(kind=="line"){
-
-                    loadChart(lineOption);
-                }else{//bar
-                    loadChart(barOption);
-                }
+            var bdStyle;
+            var loadDom;
+            var comBox=$(".commonbox");
+            comBox.find(".tj-map-type").find("li").click(function (){
+                if($(this).hasClass("active")) return false;
+                $(this).addClass("active").siblings().removeClass("active");
+                loadChart(loadDom);
             });
-            function loadChart(o){
-                console.info(o);
-                var myChart = require('echarts').init(document.getElementById('tjmap'));
-                myChart.setOption(o);
-                myChart.dispose;//销毁
+            
+            var typename=localStorage.getItem("chartType") || getQueryString("type") || "gsdj"; 
+            var typeObject={
+                "gsdj":{
+                    "setClass":"tj-tit-gsdj",
+                    "setTitle":"古树等级分布情况",
+                    "setIndex":0,
+                    "preName":"qyfb",
+                    "nextName":"gszs"
+                },
+                "gszs":{
+                    "setClass":"tj-tit-gszs",
+                    "setTitle":"古树长势分布情况",
+                    "setIndex":1,
+                    "preName":"gsdj",
+                    "nextName":"szbl"
+                },
+                "szbl":{
+                    "setClass":"tj-tit-szbl",
+                    "setTitle":"树种比例分布情况",
+                    "setIndex":2,
+                    "preName":"gszs",
+                    "nextName":"qyfb"
+                },
+                "qyfb":{
+                    "setClass":"tj-tit-qyfb",
+                    "setTitle":"各行政区域古树分布情况",
+                    "setIndex":3,
+                    "preName":"szbl",
+                    "nextName":"gsdj"
+                }
+            };
+            comBox.find(".tj-arrow").find("div").click(function (){
+                var name=$(this).attr("name");
+                localStorage.setItem("chartType",name);
+                setTongjiData(typeObject[name]);
+            });
+            function setTongjiData(obj){
+                var setClass=obj.setClass;
+                var setTitle=obj.setTitle;
+                var setIndex=obj.setIndex;
+                if(setIndex==0){
+                    comBox.find(".arrow-left").hide();
+                }else if(setIndex==3){
+                    comBox.find(".arrow-right").hide();
+                }else{
+                    comBox.find(".arrow-left,.arrow-right").show();
+                }
+                comBox.find(".tj-tit-img").attr("class","tj-tit-img "+setClass);
+                comBox.find(".tj-tit").html(setTitle);
+                comBox.find(".showimgs").stop().animate({
+                    "marginLeft":-setIndex*comBox.find(".allmapimgs").width()
+                },1000);
+                comBox.find(".arrow-left").attr("name",obj.preName).siblings(".arrow-right").attr("name",obj.nextName);
+                loadDom=comBox.find(".mapimage")[setIndex];
+
+                loadChart(loadDom);
             }
-            loadChart(barOption);
+            var myChart;
+            function loadChart(dom){
+                myChart = require('echarts').init(dom);
+                var i=comBox.find(".tj-map-type").find(".active").index();
+                bdStyle={
+                    "pie":pieOption,
+                    "line":lineOption,
+                    "bar":barOption
+                }
+                var typeArry=["pie","line","bar"];
+                var option=bdStyle[typeArry[i]] || barOption;
+                myChart.dispose;//销毁
+                myChart.setOption(option);
+                
+            }
+            setTongjiData(typeObject[typename]);
         }
     );
 });

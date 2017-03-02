@@ -66,7 +66,7 @@ body{background-color:#547543;font-family:Microsoft YaHei;color:#fff; overflow-y
 .submit-search{width:60px;height:60px;float:right;background-color:#537343;background-position:-244px -102px;cursor:pointer;}
 .search-list{position:relative;padding-top:38px;}
 .search-list .copytable{position:absolute;left:0;top:0;height:38px;overflow:hidden;width:100%;}
-.search-list .autoscroll{position:relative;max-height:380px;overflow:auto;}
+.search-list .autoscroll{position:relative;max-height:532px;overflow:auto;}
 .search-list .copytable tr:first-child th:last-child{padding-right:3px;}
 .search-list table{ width:100%;text-align: left;color:#808080;font-size:14px;}
 .search-list tr{line-height: 38px;}
@@ -158,11 +158,13 @@ body{background-color:#547543;font-family:Microsoft YaHei;color:#fff; overflow-y
 .tj-tit-gszs{background-image:url(../images/tj-tit-gszs.png);}
 .tj-tit-szbl{background-image:url(../images/tj-tit-szbl.png);}
 .tj-tit-qyfb{background-image:url(../images/tj-tit-qyfb.png);}
-.tj-map{margin:-40px 6.6% 0;background-color:#fff;height:390px;}
+.tj-map{margin:-40px 6.6% 0;background-color:#fff;}
 .tj-map .tj-tit{line-height:40px;height:40px;padding:0 1%;color:#5d7e60;font-size:14px;background-color:#d3e8d5;}
 .tj-maparea{margin-top:5%;position:relative; z-index:3;}
-#tjmap{width:82%;min-height:300px;position:relative; text-align:center;margin-left:6%;}
-#tjmap img{max-width: 100%;}
+.allmapimgs{width:82%;height:354px;position:relative;overflow:hidden; text-align:center;margin-left:6%;}
+.allmapimgs img{width: 100%;height:100%;}
+.allmapimgs .showimgs{width:400%; display: flex;height:100%;position:relative;}
+.allmapimgs .mapimage{flex:1;}
 .tj-map .arrow-left{top:50%;left:2%;margin-top:-25px;}
 .tj-map .arrow-right{top:50%;left:82.5%;margin-top:-25px;}
 .tj-map-type{position:absolute;top:0;left:90%;width:60px;}

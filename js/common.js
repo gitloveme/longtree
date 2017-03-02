@@ -42,6 +42,14 @@ $(function (){
                     var maxh=commonDom.find(".showbox").height()*(1-0.07)-235;
                     commonDom.find(".autoscroll").css("max-height",maxh)
                 break;
+                case "search":
+                    var maxh=commonDom.find(".showbox").height()*0.6;
+                    commonDom.find(".autoscroll").css("max-height",maxh)
+                break;
+                case "tjdetail":
+                    var maxh=commonDom.find(".showbox").height()-235-$(".mapimage").css("margin-top");
+                    $(".mapimage").css({"height":maxh,"width":$(".mapimage").parents(".allmapimgs").width()});
+                break;
             }
         }        
     }
