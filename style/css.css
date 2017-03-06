@@ -20,7 +20,7 @@ ul,li{list-style:none;}
 @keyframes bouncedelay { 0%, 80%, 100% { transform: scale(0.0); -webkit-transform: scale(0.0);} 40% { transform: scale(1.0); -webkit-transform: scale(1.0);}}
 @keyframes fadeoutload{from{opacity:1; }to{opacity:0.1;}}
 @-webkit-keyframes fadeoutload{from{opacity:1; }to{opacity:0.1;}}
-body{background-color:#547543;font-family:Microsoft YaHei;color:#fff; overflow-y: hidden;}
+body{background-color:#547543;font-family:Microsoft YaHei;color:#fff; overflow: hidden;}
 .icon{background-image:url(../images/icon.png);background-repeat:no-repeat;}
 .commonbox{height:100%;width:100%;position:absolute;left:0;top:0;margin:3% 0 0 3%;overflow:hidden;}	
 .nav{width:100px;height:100%;position: relative;float:left;background-color:#111a0c;}
@@ -76,9 +76,9 @@ body{background-color:#547543;font-family:Microsoft YaHei;color:#fff; overflow-y
 .search-list tr:nth-child(odd){background-color:#eef5ef;}
 .search-list tr.active,.search-list tr:hover{color:#75af69;}
 .arrow-s{width:16px;height:16px;display: inline-block;vertical-align: middle;background-position:-263px -190px;}
-.window{position:absolute;width:400px;height:310px; background-color:#537343;left:550px;top:50px;z-index:9;display: none;}
+.window{position:absolute;width:400px;height:310px; background-color:#537343;z-index:9;display: none;}
 .treeimg{width:100%;height:265px;}
-.btn-more{text-align: center;line-height: 40px;}
+.btn-more{text-align: center;line-height: 40px;cursor:pointer;}
 .btn-more a{color:#cbffd0;font-size:16px;}
 .ico-eye{width:33px;height:22px;background-position:-260px -302px;vertical-align: middle;display:inline-block;}
 .ico-arrow{width:30px;height:15px;background-position: -260px -359px;position:absolute;top:310px;left:50%;}
@@ -125,7 +125,7 @@ body{background-color:#547543;font-family:Microsoft YaHei;color:#fff; overflow-y
 /*复壮*/
 .manage-pub{background-color: #ebf4ec;width:100%;height:100%;position: relative;}
 .manage-pub-title{background-color:#75af69;padding:30px 10px 0;height:205px;}
-.form-fz{width:600px;margin:65px 0 0 50px;}
+.form-fz{width:600px;margin:65px 0 0 30px;}
 .manage-pub-title .bar-search{}
 .manage-pub-search{margin:-38px 3% 0;}
 .manage-pub-scroll{max-height:200px; overflow:auto;}
