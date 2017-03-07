@@ -3,7 +3,7 @@ var map = new BMap.Map("map");  // 创建Map实例
 map.centerAndZoom(new BMap.Point(116.404, 39.915),12);// 初始化地图
 //map.centerAndZoom(new BMap.Point(116.433,40.103),12);// 初始化地图
 map.addControl(new BMap.NavigationControl()); // 添加平移缩放控件
-map.addControl(new BMap.ScaleControl()); // 添加比例尺控件
+map.addControl(new BMap.ScaleControl({anchor:BMAP_ANCHOR_BOTTOM_RIGHT})); // 添加比例尺控件
 map.addControl(new BMap.OverviewMapControl()); // 添加缩略地图控件
 map.enableScrollWheelZoom(true); // 启用滚轮放大缩小
 map.addControl(new BMap.MapTypeControl()); // 添加地图类型控件
@@ -173,52 +173,50 @@ function addOverlayTree(){
                         var point = new BMap.Point(arry[i].x,arry[i].y);
                         var marker = new BMap.Marker(point,{icon:myIcon});
                         map.addOverlay(marker);
-                        ////
-                        var sContent ='<div class="window" style="display:block;position:relative;">'+
+                        var NO=baiduData[i].NO || 0;
+                        var sContent ='<div class="window" style="display:block;position:relative;"><div class="close-window">×</div>'+
                                 '<img src="http://123.56.168.10/images/tree-des-1.jpg" class="treeimg" alt="油松">'+
                                 '<div class="btn-more">'+
                                     '<em class="icon ico-eye"></em><a>查看详情</a>'+
                                 '</div>'+
                                 '<div class="icon ico-arrow" style="left:157px;"></div>'+
-                                '<p class="treeno">NO.110221000590</p>'+
+                                '<p class="treeno">NO.'+NO+'</p>'+
                                 '<div class="treedes">'+
                                     '<h3>油松</h3>'+
                                     '<p class="des-en">Pinus tabuliformis Carrière</p>'+
                                     '<p class="des-cn"><em class="icon ico-ori"></em>沙河镇G6高速路以东运河沿岸</p>'+
                                 '</div>'+
                             '</div>';
-                            /*var sContent='<img src="http://123.56.168.10/images/tree-des-1.jpg" alt="油松"><p>沙河镇G6高速路以东运河沿岸</p>';*/
-                            var opts = {
-                                   // title  : "昌平园林绿化局",      //标题
-                                    width  : 390,//自动加了10像素             //宽度
-                                    height : 325,              //高度
-                                    panel  : "panel",         //检索结果面板
-                                    enableAutoPan : true,     //自动平移
-                                    enableSendToPhone:false,
-                                    searchTypes   :[
-                                        /*BMAPLIB_TAB_SEARCH,   //周边检索
-                                        BMAPLIB_TAB_TO_HERE,  //到这里去
-                                        BMAPLIB_TAB_FROM_HERE //从这里出发*/
-                                    ]
-                                }
-                        var searchInfoWindow = new BMapLib.SearchInfoWindow(map,sContent,opts);  // 创建信息窗口对象
-
-                        marker.addEventListener("click", function(data){
-                            searchInfoWindow.open(this);
-
-
-                           
-                           /*console.log(data);
-                            console.log(data.point);//
-                            console.log(data.screenX+"\n"+data.screenY);
-                            console.log(data.pixel.x+"\n"+data.pixel.y);
-                            
-                            var x=data.pixel.x-data.offsetX-400/2;
-                            var y=data.pixel.y-data.offsetY-310-15;
-                            $("#map").siblings(".window").eq(0).css({top:y,left:x}).show();*/
-                        });
-                       
-                        
+                        addClickHandler(sContent,marker);
+                    }
+                    function addClickHandler(content,marker){
+                        marker.addEventListener("click",function(e){
+                            openInfoWindow(content,e,this)}
+                        );
+                    }
+                    function openInfoWindow(content,e,that){
+                        var opts = {
+                               // title  : "昌平园林绿化局",      //标题
+                                width  : 390,//自动加了10像素             //宽度
+                                height : 325,              //高度
+                                panel  : "panel",         //检索结果面板
+                                enableAutoPan : true,     //自动平移
+                                enableSendToPhone:false,
+                                searchTypes   :[
+                                    /*BMAPLIB_TAB_SEARCH,   //周边检索
+                                    BMAPLIB_TAB_TO_HERE,  //到这里去
+                                    BMAPLIB_TAB_FROM_HERE //从这里出发*/
+                                ]
+                            }
+                            var searchInfoWindow = new BMapLib.SearchInfoWindow(map,content,opts);  // 创建信息窗口对象
+                            searchInfoWindow.open(that);
+                            $(".close-window").unbind("click").click(function (){
+                                searchInfoWindow.close(that);
+                                $(this).parents(".window-detail").hide();
+                            }).siblings(".btn-more").unbind("click").click(function (){
+                                searchInfoWindow.close(that);
+                                $(".window-detail").show();
+                            });
                     }
                 }
             })
@@ -249,7 +247,7 @@ function loadSearchData(){
                     var treeType=arry[i].type || "银杏";
                     var lng=arry[i].X || 0;
                     var lat=arry[i].Y || 0;
-                    table+='<tr lng="'+lng+'" lat="'+lat+'">'+
+                    table+='<tr lng="'+lng+'" lat="'+lat+'" postnum="'+postNum+'">'+
                                '<td>'+postNum+'</td>'+
                                '<td>'+treeAdress+'</td>'+
                                '<td>'+treeType+'</td>'
@@ -259,7 +257,59 @@ function loadSearchData(){
                 var copytable='<table>'+th+table+'</table>';
                 var scrolltable='<table>'+table+'</table>';
                 
-                searchList.show().find(".copytable").empty().html(copytable).siblings(".autoscroll").empty().html(scrolltable);
+                searchList.show().find(".copytable").empty().html(copytable).siblings(".autoscroll").empty().html(scrolltable).delegate("tr","click",function (){
+                    $(this).addClass("active").siblings("tr").removeClass("active");
+                    var coords=$(this).attr("lng")+","+$(this).attr("lat");
+                    var NO=$(this).attr("postnum");
+                    $.ajax({
+                        type:"get",
+                        url:"http://api.map.baidu.com/geoconv/v1/",
+                        data:{coords:coords,ak:"2lekLZRu8XcblvoAMksUK3qmGnISyCSP"},
+                        dataType:"jsonp",
+                        success:function (bddata){
+                            if(bddata.status !=0) return false;
+                            var arry=bddata.result;    
+                            if(arry.length==0) return false;
+                            var point = new BMap.Point(arry[0].x,arry[0].y);
+                            map.centerAndZoom(point, 18);
+                            var sContent ='<div class="window" style="display:block;position:relative;"><div class="close-window">×</div>'+
+                                '<img src="http://123.56.168.10/images/tree-des-1.jpg" class="treeimg" alt="油松">'+
+                                '<div class="btn-more">'+
+                                    '<em class="icon ico-eye"></em><a>查看详情</a>'+
+                                '</div>'+
+                                '<div class="icon ico-arrow" style="left:157px;"></div>'+
+                                '<p class="treeno">NO.'+NO+'</p>'+
+                                '<div class="treedes">'+
+                                    '<h3>油松</h3>'+
+                                    '<p class="des-en">Pinus tabuliformis Carrière</p>'+
+                                    '<p class="des-cn"><em class="icon ico-ori"></em>沙河镇G6高速路以东运河沿岸</p>'+
+                                '</div>'+
+                            '</div>';
+                            var opts = {
+                               // title  : "昌平园林绿化局",      //标题
+                                width  : 390,//自动加了10像素             //宽度
+                                height : 325,              //高度
+                                panel  : "panel",         //检索结果面板
+                                enableAutoPan : true,     //自动平移
+                                enableSendToPhone:false,
+                                searchTypes   :[
+                                    /*BMAPLIB_TAB_SEARCH,   //周边检索
+                                    BMAPLIB_TAB_TO_HERE,  //到这里去
+                                    BMAPLIB_TAB_FROM_HERE //从这里出发*/
+                                ]
+                            }
+                            var searchInfoWindow = new BMapLib.SearchInfoWindow(map,sContent,opts);  // 创建信息窗口对象
+                            searchInfoWindow.open(point);
+                            $(".close-window").unbind("click").click(function (){
+                                searchInfoWindow.close(point);
+                                $(this).parents(".window-detail").hide();
+                            }).siblings(".btn-more").unbind("click").click(function (){
+                                searchInfoWindow.close(point);
+                                $(".window-detail").show();
+                            });;
+                        }
+                    });
+                });
             }
         }
     })

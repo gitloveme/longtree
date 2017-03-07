@@ -60,7 +60,7 @@ body{background-color:#547543;font-family:Microsoft YaHei;color:#fff; overflow: 
 .search-tool .tool-lang{background-image:url(../images/tool/ceju.png);}
 .search-tool .tool-area{background-image:url(../images/tool/area.png);}
 .search-tool .tool-clear{background-image:url(../images/tool/clear.png);}
-.form-search{width:600px;position:absolute;top:60px;left:60px;}
+.form-search{width:600px;position:absolute;top:7%;left:4%;}
 .bar-search{height:60px;background-color:rgba(255,255,255,0.9);margin-bottom:20px;}
 .bar-search input{font-size:14px;color:#5d7e60;line-height: 60px;padding-left: 10px;width:520px; display:-webkit-flex;display: flex;}
 .submit-search{width:60px;height:60px;float:right;background-color:#537343;background-position:-244px -102px;cursor:pointer;}
@@ -87,10 +87,11 @@ body{background-color:#547543;font-family:Microsoft YaHei;color:#fff; overflow: 
 .treedes h3{font-size:30px;font-family: "方正兰亭超细黑简体";line-height:35px;}
 .treedes p{font-size:14px;line-height: 24px;}
 .treedes .ico-ori{width:20px;height:24px;vertical-align: middle;display: inline-block;background-position:-265px -236px;margin-right:5px;}
-.window-detail{top:400px;left:100px;width:760px;color:#808080;}
+.window-detail{top:10px;right:10px;width:760px;color:#808080;}
 .window-detail .treedes{background:none;right:30px;bottom:25px;}
 .window-detail .treeno{left:50px;top:18px;}
-.close-window{font-size:20px;color:#fff;font-family:"Sim Sun";left:700px;top:20px;position:absolute;z-index: 2;cursor:pointer;}
+.close-window{font-size:20px;color:#fff;font-family:"Sim Sun";position:absolute;z-index: 2;cursor:pointer;top:10px;left:360px;background-color:rgba(0,0,0,0.5);}
+.window-detail .close-window{left:700px;top:20px;background-color:rgba(0,0,0,0);}
 .change-tree{background-color:#537343;position:relative;height:210px;padding-top:70px;}
 .change-box{position:relative;height:210px;margin:0 50px 0 70px;}
 .arrow-left,.arrow-right{width:40px;height:50px;cursor:pointer;position:absolute;z-index:3;}

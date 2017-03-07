@@ -43,8 +43,10 @@ $(function (){
                     commonDom.find(".autoscroll").css("max-height",maxh)
                 break;
                 case "search":
-                    var maxh=commonDom.find(".showbox").height()*0.6;
-                    commonDom.find(".autoscroll").css("max-height",maxh)
+                    var maxh=commonDom.find(".showbox").height()*0.7;
+                    commonDom.find(".autoscroll").css("max-height",maxh);
+                    var maxs=commonDom.find(".showbox").height()*(1-0.06)-320;
+                    $(".tree-intro").css("max-height",maxs);
                 break;
                 case "tjdetail":
                     var maxh=commonDom.find(".showbox").height()-235-$(".mapimage").css("margin-top");
