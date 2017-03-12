@@ -23,6 +23,7 @@ ul,li{list-style:none;}
 body{background-color:#547543;font-family:Microsoft YaHei;color:#fff; overflow: hidden;}
 .icon{background-image:url(../images/icon.png);background-repeat:no-repeat;}
 .commonbox{height:100%;width:100%;position:absolute;left:0;top:0;margin:3% 0 0 3%;overflow:hidden;}	
+.boxs{width:1000px;margin:0 auto;position:relative;}
 .nav{width:100px;height:100%;position: relative;float:left;background-color:#111a0c;}
 .nav li{width:100px;height:100px;display: block;cursor:pointer;}
 .nav li.active,.nav li:hover{background-color:#22391d;}
@@ -176,6 +177,15 @@ body{background-color:#547543;font-family:Microsoft YaHei;color:#fff; overflow: 
 .tj-map-type .tj-type-a.active,.tj-map-type .tj-type-a:hover{background-position: 0 -547px;}
 .tj-map-type .tj-type-b.active,.tj-map-type .tj-type-b:hover{background-position:-70px -547px;}
 .tj-map-type .tj-type-c.active,.tj-map-type .tj-type-c:hover{background-position:-140px -547px;}
+/*古树详情*/
+.scrollbody{overflow-y:scroll;}
+.tree-detail{position: relative;color:#808080;padding:20px 0 40px;}
+.tree-detail .change-tree{width:960px;margin:0 auto;}
+.tree-detail .treedes{background:none;}
+.tree-detail .treedes{bottom: 5px;}
+.tree-detail .tree-intro{max-height:none;}
+.tree-detail .tree-type{margin:10px auto;text-align: center;}
+.tree-detail .tree-type span{display:inline;}
 /*定义滚动条宽高及背景，宽高分别对应横竖滚动条的尺寸*/
 .autoscroll::-webkit-scrollbar{
     width: 5px;
