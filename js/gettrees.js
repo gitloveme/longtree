@@ -12,8 +12,8 @@ $(function (){
             type:"get",
             url:"/inf/getLocation",
             data:option,
-            dataType:"jsonp",
-            error:function (){},
+            dataType:"json",
+            error:function (error){console.error(error);},
             success:function (data){
                  /*data={"status":"200","error":null,"data":[{"NO":"11011400001","X":"116.24218470898","Y":"40.226302719135"},{"NO":"11011400002","X":"116.2421917322","Y":"40.226306608809"}],"records":null,"objectNode":{},"arrayNode":[]};*/
                   /*
@@ -100,8 +100,9 @@ $(function (){
 
                      }
                      var totalcount=data.records || 100;
-                     var pagehtml=returnPagehtml(page_index,totalcount,page_num);
-                     searchDom.find(".copytable").empty().html('<table>'+tableTh+treelist+'</table>').siblings(".autoscroll").empty().html('<table>'+treelist+'</table>').siblings(".pagenumber").empty().html(pagehtml);                     
+                     var pagehtml=returnPagehtml(option.page_index,totalcount,option.page_num);
+                     //searchDom.find(".copytable").empty().html('<table>'+tableTh+treelist+'</table>').siblings(".autoscroll").empty().html('<table>'+tableTh+treelist+'</table>').siblings(".pagenumber").empty().html(pagehtml);                     
+                     searchDom.find(".copytable").empty().html('').siblings(".autoscroll").empty().html('<table>'+tableTh+treelist+'</table>').siblings(".pagenumber").empty().html(pagehtml);                     
                 }else{
                     var errormsg=data.error || "出现未知错误，请您稍后重试"
                     alert(errormsg)
@@ -111,6 +112,7 @@ $(function (){
         });
     }
     buildListTree();
+    
     function returnPagehtml(num,totalcount,pagesize){
         var totalPage=Math.ceil(totalcount/pagesize);
         var isFirstpage= num==1;
@@ -168,10 +170,27 @@ $(function (){
         }
         isLastpage ? pagehtml+='<a href="javascript:;" class="page_next last">下一页</a>':pagehtml+='<a href="javascript:;" title="下一页" class="page_next" page="'+nextnum+'">下一页</a>';
         var jumpNum=num<=totalPage?num:totalPage;
-        var phtml='总计'+totalcount+'记录'+pagehtml+'至第<input class="jumpvalue" value="'+jumpNum+'" type="text">页 <input class="submit" value="跳转" type="button" totalpage="'+totalPage+'">';
+        var phtml='每页'+pagesize+'总计'+totalcount+'记录'+pagehtml+'至第<input class="jumpvalue" value="'+jumpNum+'" type="text">页 <input class="submit" value="跳转" type="button" totalpage="'+totalPage+'">';
         //var phtml='<div class="pagenumber">总计'+totalcount+'记录'+pagehtml+'至第<input class="jumpvalue" value="'+jumpNum+'" type="text">页 <input class="submit" value="跳转" type="button" totalpage="'+totalPage+'"></div>';
         return phtml;
     }
+    searchDom.find(".pagenumber").delegate("a","click",function (){
+        var t=$(this);
+        if(t.hasClass("now")||t.hasClass("last")) return false;
+        var number=t.attr("page");
+        buildListTree({page_index:number});
+    }).delegate(".submit","click",function (){
+        var t=$(this);
+        var now=parseInt(t.siblings(".now").text());
+        var number=parseInt($.trim(t.siblings(".jumpvalue").val()));
+        var totalPage=parseInt(t.attr("totalpage"));
+        if(number>0&&number!=now&&number<=totalPage){
+            buildListTree({page_index:number});
+        }
+        else{
+            t.siblings(".jumpvalue").select();
+        }
+    });
     $(".manage-btn-edit").click(function (){
         location.href="/introtree.html"
     });
