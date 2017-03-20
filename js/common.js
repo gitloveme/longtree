@@ -39,8 +39,9 @@ $(function (){
                     commonDom.find(".manage-navs").css({"margin-top":-w/2,width:6*w}).find("li").css({width:w,height:w});
                 break;
                 case "managelist"://
-                    var maxh=commonDom.find(".showbox").height()*(1-0.07)-235;
-                    commonDom.find(".autoscroll").css("max-height",maxh)
+                    var maxh=commonDom.find(".showbox").height()*(1-0.07)-235-20;
+                    //commonDom.find(".autoscroll").css("max-height",maxh)
+                    commonDom.find(".autoscroll").css("height",maxh)
                 break;
                 case "search":
                     var maxh=commonDom.find(".showbox").height()*0.7;

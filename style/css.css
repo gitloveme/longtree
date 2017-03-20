@@ -94,13 +94,13 @@ body{background-color:#547543;font-family:Microsoft YaHei;color:#fff; overflow: 
 .close-window{font-size:20px;color:#fff;font-family:"Sim Sun";position:absolute;z-index: 2;cursor:pointer;top:10px;left:360px;background-color:rgba(0,0,0,0.5);}
 .window-detail .close-window{left:700px;top:20px;background-color:rgba(0,0,0,0);}
 .change-tree{background-color:#537343;position:relative;height:210px;padding-top:70px;}
-.change-box{position:relative;height:210px;margin:0 50px 0 70px;}
-.arrow-left,.arrow-right{width:40px;height:50px;cursor:pointer;position:absolute;z-index:3;}
+.change-box{position:relative;height:210px;margin:0 50px 0 70px;overflow:hidden;width:374px;}
+.change-box img{left:-187px;top:105px;width:0;height:0; z-index: 0;border:1px solid #537343;position:absolute;}
+.arrow-left,.arrow-right{width:40px;height:50px;cursor:pointer;position:absolute;z-index:4;}
 .arrow-left{background-position:-2px -417px;}
 .arrow-right{background-position:-40px -417px;}
 .change-tree .arrow-left{top:160px;left:20px;}
 .change-tree .arrow-right{top:160px;left:448px;}
-.change-box img{border:1px solid #537343;position:absolute;}
 .change-box .curr-img{width:208px;height:208px;top:0;left:81px;z-index:2;}
 .change-box .pre-img,.change-box .next-img{width:185px;height:185px;top:23px;opacity:0.5;}
 .change-box .pre-img{left:0;}
@@ -186,6 +186,27 @@ body{background-color:#547543;font-family:Microsoft YaHei;color:#fff; overflow: 
 .tree-detail .tree-intro{max-height:none;}
 .tree-detail .tree-type{margin:10px auto;text-align: center;}
 .tree-detail .tree-type span{display:inline;}
+/*分页*/
+.pagelist{text-align: center;clear: both;color: #333;position:absolute;width:100%; letter-spacing:2px;}
+.pagelist span{display: inline-block;vertical-align: middle;padding: 0 10px;border: 1px solid #e2e2e2;
+    height: 28px;line-height: 28px;margin: 0 -1px 5px 0;background-color: #fff;color: #333;font-size: 14px;cursor:pointer;letter-spacing:0px;}
+.pagelist span:hover{color:#547543;}
+.pagelist .unallow{cursor:not-allowed;}
+.pagelist .on:hover{color:#fff;}
+.pagelist .on{background-color: #547543;color:#fff;cursor:default;}
+
+/*页码*/
+.pagenumber{color: #333; font-size: 14px; font-family:"Microsoft YaHei"; text-align:center; position:relative; padding-top:10px;}
+.pagenumber a{ color: #333; display:inline-block;height:28px;line-height: 28px; text-align: center; margin:0 2px;padding: 0 10px;background-color:#fff; font-size:14px; text-decoration: none;}
+.pagenumber a.now{background-color:#547543;color:#fff;}
+.pagenumber .page_prev,.pagenumber .page_next{ background-color:#547543;color:#fff; }
+.pagenumber .page_prev{ margin-left:10px;}
+.pagenumber .page_next{ margin-right:10px;}
+.pagenumber em{ font-family:"SimSun";}
+.pagenumber .page_prev.last,.pagenumber .page_next.last{ background-color:#f7f7f7;color: #939393; cursor:not-allowed;}
+#toPage,.pagenumber .jumpvalue{ border:1px solid #ebebeb; padding:3px 0; font-size:16px; color:#939393; width:45px; text-align:center; margin:0 4px;font-family:"Microsoft YaHei";}
+
+.pagenumber .submit{background-color:#547543;color:#fff;display:inline-block;width:60px; height: 28px;line-height: 28px; text-align: center; margin:0 2px; border:none; margin-left:5px; font-size:14px; font-family:"Microsoft YaHei"; cursor:pointer;}
 /*定义滚动条宽高及背景，宽高分别对应横竖滚动条的尺寸*/
 .autoscroll::-webkit-scrollbar{
     width: 5px;

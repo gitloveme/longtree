@@ -7,7 +7,7 @@
 <title>昌平区园林绿化局古树名木管理系统</title>
 <link href="style/css.css" rel="stylesheet">
 </head>
-<body resizeType="managelist">
+<body resizeType="managelist" loadTpye="1">
 <div id="loading">
     <div class="spinner">
     <div class="bounce1"></div>
@@ -40,23 +40,9 @@
 					<span title="新增" class="manage-btn-add icon"></span><span title="编辑" class="manage-btn-edit icon"></span><span title="删除" class="manage-btn-del icon"></span>
 				</div>
 			</div>
-			<!-- <div class="search-list manage-pub-search">
-				<table>
-					<tr>
-						<th>编号<em class="icon arrow-s"></em></th>
-						<th>树种</th>
-						<th>地点</th>
-						<th>修复内容</th>
-						<th>负责人</th>
-						<th>复壮时间</th>
-						<th>复壮前</th>
-						<th>复壮后</th>
-					</tr>
-				</table>
-			</div> -->
 			<div class="search-list manage-pub-search">
 				<div class="copytable">
-				<table>
+				<!-- <table>
 					<tr>
 						<th class="padleft">编号<em class="icon arrow-s"></em></th>
 						<th>树种</th>
@@ -137,11 +123,11 @@
 						<td><em class="icon ico-fzq"></em></td>
 						<td class="padright"><em class="icon ico-fzh"></em></td>
 					</tr>
-				</table>
+				</table> -->
 				</div>
 				<div class="autoscroll">
-				<table>
-					<!-- <tr>
+				<!-- <table>
+					<tr>
 						<th class="padleft">编号<em class="icon arrow-s"></em></th>
 						<th>树种</th>
 						<th>地点</th>
@@ -150,16 +136,6 @@
 						<th>复壮时间</th>
 						<th>复壮前</th>
 						<th class="padright">复壮后</th>
-					</tr> -->
-					<tr>
-						<td class="padleft">110221000576</td>
-						<td>银杏</td>
-						<td>南邵镇张营村运河南岸211926地块</td>
-						<td>树洞修补</td>
-						<td>张王李</td>
-						<td>20161224</td>
-						<td><em class="icon ico-fzq"></em></td>
-						<td class="padright"><em class="icon ico-fzh"></em></td>
 					</tr>
 					<tr>
 						<td class="padleft">110221000576</td>
@@ -291,13 +267,28 @@
 						<td><em class="icon ico-fzq"></em></td>
 						<td class="padright"><em class="icon ico-fzh"></em></td>
 					</tr>
-				</table>
+					<tr>
+						<td class="padleft">110221000576</td>
+						<td>银杏</td>
+						<td>南邵镇张营村运河南岸211926地块</td>
+						<td>树洞修补</td>
+						<td>张王李</td>
+						<td>20161224</td>
+						<td><em class="icon ico-fzq"></em></td>
+						<td class="padright"><em class="icon ico-fzh"></em></td>
+					</tr>
+				</table> -->
 				</div>
+				<!-- <div class="pagelist">
+					<span class="pre-page unallow">上一页</span><span class="on">1</span><span>2</span><span>3</span><span>4</span> ··· <span>7</span><span>8</span><span class="cur-page">下一页</span>
+				</div> -->
+				<div class="pagenumber">总计1记录<a href="javascript:;" class="page_prev last">上一页</a><a href="javascript:;" class="now">1</a><a href="javascript:;" class="page_next last">下一页</a>至第<input class="jumpvalue" value="1" type="text">页&nbsp;<input class="submit" value="跳转" type="button" totalpage="1"></div>
 			</div>
 		</div>
 	</div>
 </div>
 <script src="js/jquery.js"></script>
 <script src="js/common.js"></script>
+<script src="js/gettrees.js"></script>
 </body>
 </html>
