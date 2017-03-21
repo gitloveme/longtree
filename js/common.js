@@ -6,7 +6,108 @@ function getQueryString(name) {
     }
     return null;
 }
+/*公共弹窗提示*/
+var dialogState=true;
+function dialogMessage(title,message,showbtn,callback){
+    var dialoghtml='<div class="dialog" style="display:block">'+
+                    '<div class="dialog-con">'+
+                            '<div class="dialog-tit">'+title+'</div>'+
+                            '<div class="dialog-close">×</div>'+
+                            '<div class="dialog-msg">'+message+'</div>'+
+                            '<div class="dialog-btns">'+
+                                '<a href="javascript:;" class="btn-cancel">取消</a><a href="javascript:;" class="btn-sure">确定</a>'+
+                            '</div>'+
+                        '</div>'+
+                    '</div>';
+    
+    if($(".dialog").length==0){
+        $("body").append(dialoghtml);
+    }
+    var Dialog=$(".dialog");
+    if(!dialogState) return false;
+    dialogState=false;
+    
+
+    Dialog.show().find(".dialog-tit").text(title).siblings(".dialog-msg").html(message).siblings(".dialog-close").unbind("click").click(function (){
+        Dialog.hide().find(".dialog-btns").hide();
+        dialogState=true;
+    });
+    if(showbtn){
+        Dialog.find(".dialog-btns").show().find(".btn-cancel").unbind("click").click(function (){
+            Dialog.hide().find(".dialog-btns").hide();
+            dialogState=true;
+        }).siblings(".btn-sure").unbind("click").click(function (){
+            Dialog.hide().find(".dialog-btns").hide();
+            callback && callback();
+            dialogState=true;
+        });
+    }
+}
+/*分页代码*/
+function returnPagehtml(num,totalcount,pagesize){
+    var totalPage=Math.ceil(totalcount/pagesize);
+    var isFirstpage= num==1;
+    var isLastpage= num==totalPage;
+    var prevnum=parseInt(num)-1;
+    var nextnum=parseInt(num)+1;
+    var pagehtml="";
+    isFirstpage ? pagehtml+='<a href="javascript:;" class="page_prev last">上一页</a>':pagehtml+='<a href="javascript:;" title="上一页" class="page_prev" page="'+prevnum+'">上一页</a>';
+    var larPage=7;//最多显示的页码数
+    if(totalPage <= larPage){
+        for(var i=0;i<totalPage;i++){
+            var n=i+1;
+            n==num ? pagehtml+='<a href="javascript:;" class="now">'+n+'</a>':pagehtml+='<a href="javascript:;" page="'+n+'">'+n+'</a>';
+        }
+    }
+    else{
+        var beforenum=num-3;
+        var afternum=num+3;
+        if(beforenum<0){
+            afternum=afternum+Math.abs(beforenum);
+            beforenum=1;
+        }
+        else if(afternum>totalPage){
+            beforenum=beforenum-Math.abs(afternum-totalPage);
+            afternum=totalPage;
+        }
+        for(var i=0;i<totalPage;i++){
+            var n=i+1;
+            if(n>=beforenum&&n<=afternum){
+                if(num-3>0){
+                    if(n==num) {pagehtml+='<a href="javascript:;" class="now">'+n+'</a>'}
+                    else if(n==beforenum){pagehtml+='<a href="javascript:;" page="1">1</a> ··· ';}
+                    else{
+                        if(afternum<totalPage){
+                            if(n!=afternum){
+                                pagehtml+='<a href="javascript:;" page="'+n+'">'+n+'</a>';
+                            }
+                        }
+                        else{
+                            pagehtml+='<a href="javascript:;" page="'+n+'">'+n+'</a>';
+                        }
+                    }
+                }
+                else{
+                    if(n==num) {pagehtml+='<a href="javascript:;" class="now">'+n+'</a>'}
+                    else{
+                        pagehtml+='<a href="javascript:;" page="'+n+'">'+n+'</a>';
+                    }
+                }
+            }
+        }
+        if(num+3<totalPage){
+            pagehtml+=' ··· <a href="javascript:;" page="'+totalPage+'">'+totalPage+'</a>';
+        }
+    }
+    isLastpage ? pagehtml+='<a href="javascript:;" class="page_next last">下一页</a>':pagehtml+='<a href="javascript:;" title="下一页" class="page_next" page="'+nextnum+'">下一页</a>';
+    var jumpNum=num<=totalPage?num:totalPage;
+    var phtml='每页'+pagesize+'总计'+totalcount+'记录'+pagehtml+'至第<input class="jumpvalue" value="'+jumpNum+'" type="text">页 <input class="submit" value="跳转" type="button" totalpage="'+totalPage+'">';
+    //var phtml='<div class="pagenumber">总计'+totalcount+'记录'+pagehtml+'至第<input class="jumpvalue" value="'+jumpNum+'" type="text">页 <input class="submit" value="跳转" type="button" totalpage="'+totalPage+'"></div>';
+    return phtml;
+}
 $(function (){
+    /*判断用户是否登录/inf/isUserLogin*/
+
     var commonDom=$(".commonbox");
     var commonNav=commonDom.find(".nav");
     commonNav.find("li").click(function (){

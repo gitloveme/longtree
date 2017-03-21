@@ -83,7 +83,7 @@ function getAcreage(){
 //清理覆盖物
 function clearToolPloy(){
     map.clearOverlays();
-    addOverlayTree(confine);
+    addOverlayTree();
     moveMap();
 }
 
@@ -141,11 +141,12 @@ function addTreeTileLayer(){
     };      
     map.addTileLayer(treeLayer);
 }
-function addOverlayTree(){
+function addOverlayTree(op){
+    var option=$.extend({page_index:1,page_num:50},op);
     $.ajax({
         type:"get",
         url:"/inf/getLocation",
-        data:{},
+        data:option,
         dataType:"json",
         error:function (error){console.error("获取位置信息出错")},
         success:function (data){

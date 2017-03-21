@@ -30,11 +30,14 @@
 		<div class="manage-pub">
 			<div class="manage-pub-title clear">
 				<div class="manage-pub-type manage-pub-add fl"></div>
-				<div class="form-fz fl">
+				<!-- <div class="form-fz fl">
 					<div class="bar-search">
 						<div class="icon submit-search" type=""></div>
 						<input type="text" class="searchvalue" placeholder="请输古树编号、小地名、时间查询">
 					</div>
+				</div> -->
+				<div class="manage-pub-btns fl" style="position: relative;margin:-20px 0 0 40px;">
+					<span title="新增" class="manage-btn-add icon"></span><span title="编辑" class="manage-btn-edit icon"></span><span title="删除" class="manage-btn-del icon"></span>
 				</div>
 			</div>
 			<div class="search-list manage-pub-search">
@@ -376,7 +379,244 @@
 		</div>
 	</div>
 </div>
+<style>
+.dialog{position: fixed;left:0;top:0;width:100%;height:100%;background-color: rgba(0,0,0,.8);display: none;}
+/*定义滚动条宽高及背景，宽高分别对应横竖滚动条的尺寸*/
+.write-con::-webkit-scrollbar{
+    width: 5px;
+    height: 10px;
+    background-color: #c1dcb9;
+}
+/*定义滚动条的轨道，内阴影及圆角*/
+.write-con::-webkit-scrollbar-track{
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+    border-radius: 10px;
+    background-color: #c1dcb9;
+}
+/*定义滑块，内阴影及圆角*/
+.write-con::-webkit-scrollbar-thumb{
+    /*width: 10px;*/
+    height: 20px;
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+    background-color: #75af69;
+}
+.dialog .writetree{width:960px;margin:5% auto;color: #808080;font-size: 14px;background-color:#fff;padding:20px 20px 20px 20px;height:80%;position:relative;}
+.write-con{max-height:100%;position: relative;overflow:auto;}
+.writetree .write-tit{font-size:18px;line-height:40px;color:#547543;border-bottom:1px solid #ccc;margin-bottom:10px;}
+.writetree ul:before,.writetree ul:after{display:table;content:"";}
+.writetree ul:after{clear:both;}
+.writetree ul{zoom:1;}
+.writetree li{width:33%;float: left; flex: 1;line-height:26px;height:26px;margin-bottom:10px;}
+.writetree input{font-size:14px;color:#547543; line-height: 26px;height:26px;border:1px solid #ccc;border-radius:5px;padding:0 0 0 6px;width:170px;}
+.writetree select,.writetree option{line-height: 26px;height:26px;}
+.writetree textarea{width:90%;vertical-align: text-top;height:78px;line-height: 26px;font-size: 14px; color:#547543;border-radius:5px;padding:5px;outline: none;}
+.writetree textarea:focus,.writetree input:focus{border: 1px solid #547543;}
+.writetree .image-des{margin:10px 0;}
+.writetree .image-des input{width:90%;}
+.label-file{background-color: #547543;color: #fff;padding: 5px 20px;border-radius:5px;cursor: pointer;}
+.write-btns{margin-top:30px;text-align:right;height:40px;padding-right:10px;}
+.write-btns span{display: inline-block;padding: 5px 10px;border:1px solid #547543;border-radius: 5px;margin-left:10px;cursor:pointer;color:#547543;}
+.write-btns .btns-submit,.write-btns span:hover{background-color:#547543;color:#fff;}
+.uploadlist{margin:10px 0;}
+.uploadlist .image{float: left;margin:0 10px 0 0;width:100px;height:100px;position: relative;}
+.uploadlist img{width:100%;height: 100%;}
+.uploadlist .delimg{width:20px;height: 20px; color:#fff;background-color:#547543;font-size: 18px;position: absolute;top:5px;right:5px; text-align: center;line-height: 20px;cursor:pointer;border-radius:50%;}
+.write-close{width:30px;height: 30px; text-align: center;line-height: 30px;color:#fff;background-color:#547543;font-size:22px;position: absolute;top:5px;right:7px; cursor:pointer;border-radius:50%;z-index: 100;}
+</style>
+<div class="dialog">
+	<div class="writetree">
+		<div class="write-close">×</div>
+		<div class="write-con">
+			<div class="write-tit">古树基本信息</div>
+			<ul>
+				<li>
+					古树名木编号：<input type="text" placeholder="请输入古树编号">
+				</li>
+				<li>所属区县：<input type="text" value="昌平" readonly=""></li>
+				<li>
+					原挂牌号：<input type="text" placeholder="请输入原挂牌号">
+				</li>
+			</ul>
+			<div class="write-tit">树种</div>
+			<ul>
+				<li>树种：<select><option value="">--请选择--</option>
+						    <option value="侧柏">侧柏</option>
+						    <option value="桧柏">桧柏</option>
+						    <option value="油松">油松</option>
+						    <option value="白皮松">白皮松</option>
+						    <option value="雪松">雪松</option>
+						    <option value="银杏">银杏</option>
+						    <option value="栾树">栾树</option>
+						    <option value="元宝枫">元宝枫</option>
+						    <option value="白玉兰">白玉兰</option>
+						    <option value="楸树">楸树</option>
+						    <option value="榆树">榆树</option>
+						    <option value="七叶树">七叶树</option>
+						    <option value="国槐">国槐</option>
+						    <option value="水杉">水杉</option>
+						    <option value="桑树">桑树</option>
+						    <option value="枣树">枣树</option>
+						    <option value="朴树">朴树</option>
+						    <option value="黑枣">黑枣</option>
+						    <option value="丝绵木">丝绵木</option>
+						    <option value="核桃">核桃</option>
+						    <option value="杜梨">杜梨</option>
+						    <option value="龙爪槐">龙爪槐</option>
+						    <option value="杜仲">杜仲</option>
+						    <option value="流苏">流苏</option>
+						    <option value="梓树">梓树</option>
+						    <option value="黄金树">黄金树</option>
+						    <option value="皂角">皂角(皂荚)</option>
+						    <option value="臭椿">臭椿(香椿)</option>
+						    <option value="梧桐">梧桐</option>
+						    <option value="白蜡">白蜡</option>
+						    <option value="小叶椴">小叶椴(蒙椴)</option>
+						    <option value="卫矛">卫矛</option>
+						    <option value="洋槐">洋槐</option>
+						</select>
+				</li>
+				<li>特征代码：<input type="text"/></li>
+				<li>古树等级：<select><option value="">--请选择--</option><option>一级</option><option>二级</option></select></li>
+				<li>树 高(m)：<input type="text"/></li>
+				<li>胸径(主蔓径)cm：<input type="text"/></li>
+				<li>古树来源：<input type="text"/></li>
+			</ul>
+			<div class="write-tit">树龄</div>
+			<ul>
+				<li>估测树龄：<input type="text" /></li>
+				<li>真实树龄：<input type="text" /></li>
+			</ul>
+			<div class="write-tit">树龄</div>
+			<ul>
+				<li>特点：<select><option value="">--请选择--</option><option>群状</option><option>散生</option></select></li>
+				<li>生长势：<select><option value="">--请选择--</option>
+					    <option value="良好">良好</option>
+					    <option value="衰弱">衰弱</option>
+					    <option value="濒危">濒危</option>
+					</select>
+				</li>
+				<li>生长环境：<select><option value="">--请选择--</option>
+					    <option value="良好">良好</option>
+					    <option value="合格">合格</option>
+					    <option value="差">差</option>
+					</select>
+				</li>
+			</ul>
+			<div class="write-tit">位置</div>
+			<ul>
+				<li>乡镇：<select><option value="">--请选择--</option><option>小汤山镇</option><option>兴寿镇</option><option>城北街道</option><option>南口地区</option><option>马池口地区</option><option>沙河地区</option> <option>城南街道</option><option>回龙观地区</option><option>阳坊镇</option><option>南邵镇</option><option>崔村镇</option><option>百善镇</option><option>北七家镇</option><option>长陵镇</option></select></li>
+				<li>村委会：<input type="text" /></li>
+				<li>小地名：<input type="text" /></li>
+				<li>生长场所：<select><option value="">--请选择--</option>
+				    <option value="远郊野外">远郊野外</option>
+				    <option value="乡村街道">乡村街道</option>
+				    <option value="区县城区">区县城区</option>
+				    <option value="市区范围">市区范围</option>
+				    <option value="自然保护区">自然保护区</option>
+				    <option value="风景名胜区">风景名胜区</option>
+				    <option value="森林公园">森林公园</option>
+				    <option value="历史文化街区及历史名园">历史文化街区及历史名园</option>
+				    </select>
+				</li>
+				<li>现存状态：<select><option value="">--请选择--</option>
+				    <option value="正常">正常</option>
+				    <option value="死亡">死亡</option>
+				    </select>
+			    </li>
+				<li>调查号：<input type="text" /></li>
+				<li>坡向：<input type="text" /></li>
+				<li>坡度：<input type="text" /></li>
+				<li>坡位：<input type="text" /></li>
+				<li>海拔：<input type="text" /></li>
+				<li>横坐标：<input type="text" /></li>
+				<li>纵坐标：<input type="text" /></li>
+				<li><input type="button" value="在地图上选取坐标"></li>
+			</ul>
+			<div class="write-tit">冠幅</div>
+			<ul>
+				<li>平均冠幅(m)：<input type="text" /></li>
+				<li>东西(m)：<input type="text" /></li>
+				<li>南北(m)：<input type="text" /></li>
+			</ul>
+			<div class="write-tit">管护责任</div>
+			<ul>
+				<li>管护责任单位：<select><option value="">--请选择--</option>
+					    <option value="城建集团">城建集团</option>
+					    <option value="西山林场">西山林场</option>
+					    <option value="海淀农林委">海淀农林委</option>
+					    <option value="海淀市政">海淀市政</option>
+					    <option value="公园管理中心">公园管理中心</option>
+	    			</select>
+	    		</li>
+				<li>管护责任人：<input type="text" /></li>
+			</ul>
+			<div class="write-tit">基本信息</div>
+			<ul>
+				<li>护栏：<input type="text" /></li>
+				<li>树池透气铺装：<input type="text" /></li>
+				<li>树池透气铺装：<input type="text" /></li>
+				<li>地上保护现状：<input type="text" /></li>
+				<li>养护复壮现状：<input type="text" /></li>
+				<li>树木特殊状况描述：<input type="text" /></li>
+				<li>封堵树洞：<input type="text" /></li>
+				<li>叶面施肥：<input type="text" /></li>
+				<li>复壮沟：<input type="text" /></li>
+				<li>根灌助壮剂：<input type="text" /></li>
+				<li>渗井：<input type="text" /></li>
+				<li>土壤名称：<input type="text" /></li>
+				<li>支撑：<input type="text" /></li>
+				<li>树池：<input type="text" /></li>
+				<li>幼树靠接：<input type="text" /></li>
+				<li>通气管：<input type="text" /></li>
+				<li>树种鉴定记载：<input type="text" /></li>
+				<li>影响生长环境因素：<input type="text" /></li>
+				<li>其它：<input type="text" /></li>
+			</ul>
+			<div class="write-intro">名木介绍：<textarea></textarea></div>
+			<div class="image-des">照片说明：<input type="text"></div>
+			<div class="upload">图片上传：<label for="uploadimg" class="label-file">上传图片</label><input type="file" id="uploadimg" accept="image/*" hidden></div>
+			<div class="uploadlist clear">
+				
+			</div>
+			<div class="write-btns">
+				<span class="btns-submit">添加古树</span><span class="btns-clear">清空表单</span><span class="btns-cancel">取消添加</span>
+			</div>
+		</div>
+	</div>
+</div>
 <script src="js/jquery.js"></script>
 <script src="js/common.js"></script>
+<script type="text/javascript">
+$(function (){
+	document.getElementById("uploadimg").onchange=function (event){
+		var files=event.target.files;
+		for(var i=0;i<files.length;i++){
+			getImgBase64(files[i]);
+		}
+		
+	}
+	function getImgBase64(image){
+		var reader = new FileReader();
+		
+		reader.onload=function (e){
+			var baseimg=e.target.result;
+			console.log("图片的base64格式："+baseimg);
+			var oImg='<div class="image"><img src="'+baseimg+'"><div class="delimg" title="删除">×</div></div>'
+			$(".uploadlist").eq(0).append(oImg);
+		}
+		reader.readAsDataURL(image);
+	}
+	$(".uploadlist").delegate(".delimg","click",function (){
+		$(this).parent().remove();
+	});
+	$(".write-close").click(function (){
+		$(this).parents(".dialog").hide();
+	});
+	$(".manage-btn-add").click(function (){
+		$(".dialog").show();
+	});
+});
+</script>
 </body>
 </html>

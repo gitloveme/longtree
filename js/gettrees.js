@@ -113,67 +113,7 @@ $(function (){
     }
     buildListTree();
     
-    function returnPagehtml(num,totalcount,pagesize){
-        var totalPage=Math.ceil(totalcount/pagesize);
-        var isFirstpage= num==1;
-        var isLastpage= num==totalPage;
-        var prevnum=parseInt(num)-1;
-        var nextnum=parseInt(num)+1;
-        var pagehtml="";
-        isFirstpage ? pagehtml+='<a href="javascript:;" class="page_prev last">上一页</a>':pagehtml+='<a href="javascript:;" title="上一页" class="page_prev" page="'+prevnum+'">上一页</a>';
-        var larPage=7;//最多显示的页码数
-        if(totalPage <= larPage){
-            for(var i=0;i<totalPage;i++){
-                var n=i+1;
-                n==num ? pagehtml+='<a href="javascript:;" class="now">'+n+'</a>':pagehtml+='<a href="javascript:;" page="'+n+'">'+n+'</a>';
-            }
-        }
-        else{
-            var beforenum=num-3;
-            var afternum=num+3;
-            if(beforenum<0){
-                afternum=afternum+Math.abs(beforenum);
-                beforenum=1;
-            }
-            else if(afternum>totalPage){
-                beforenum=beforenum-Math.abs(afternum-totalPage);
-                afternum=totalPage;
-            }
-            for(var i=0;i<totalPage;i++){
-                var n=i+1;
-                if(n>=beforenum&&n<=afternum){
-                    if(num-3>0){
-                        if(n==num) {pagehtml+='<a href="javascript:;" class="now">'+n+'</a>'}
-                        else if(n==beforenum){pagehtml+='<a href="javascript:;" page="1">1</a> ··· ';}
-                        else{
-                            if(afternum<totalPage){
-                                if(n!=afternum){
-                                    pagehtml+='<a href="javascript:;" page="'+n+'">'+n+'</a>';
-                                }
-                            }
-                            else{
-                                pagehtml+='<a href="javascript:;" page="'+n+'">'+n+'</a>';
-                            }
-                        }
-                    }
-                    else{
-                        if(n==num) {pagehtml+='<a href="javascript:;" class="now">'+n+'</a>'}
-                        else{
-                            pagehtml+='<a href="javascript:;" page="'+n+'">'+n+'</a>';
-                        }
-                    }
-                }
-            }
-            if(num+3<totalPage){
-                pagehtml+=' ··· <a href="javascript:;" page="'+totalPage+'">'+totalPage+'</a>';
-            }
-        }
-        isLastpage ? pagehtml+='<a href="javascript:;" class="page_next last">下一页</a>':pagehtml+='<a href="javascript:;" title="下一页" class="page_next" page="'+nextnum+'">下一页</a>';
-        var jumpNum=num<=totalPage?num:totalPage;
-        var phtml='每页'+pagesize+'总计'+totalcount+'记录'+pagehtml+'至第<input class="jumpvalue" value="'+jumpNum+'" type="text">页 <input class="submit" value="跳转" type="button" totalpage="'+totalPage+'">';
-        //var phtml='<div class="pagenumber">总计'+totalcount+'记录'+pagehtml+'至第<input class="jumpvalue" value="'+jumpNum+'" type="text">页 <input class="submit" value="跳转" type="button" totalpage="'+totalPage+'"></div>';
-        return phtml;
-    }
+    
     searchDom.find(".pagenumber").delegate("a","click",function (){
         var t=$(this);
         if(t.hasClass("now")||t.hasClass("last")) return false;
