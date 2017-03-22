@@ -68,7 +68,9 @@ body{background-color:#547543;font-family:Microsoft YaHei;color:#fff; overflow: 
 .search-list{position:relative;padding-top:38px;}
 .search-list .copytable{position:absolute;left:0;top:0;height:38px;overflow:hidden;width:100%;}
 .search-list .autoscroll{position:relative;max-height:532px;overflow:auto;}
+/*
 .search-list .copytable tr:first-child th:last-child{padding-right:3px;}
+*/
 .search-list table{ width:100%;text-align: left;color:#808080;font-size:14px;}
 .search-list tr{line-height: 38px;}
 .search-list td:first-child,.search-list td:last-child,.search-list th:first-child,.search-list th:last-child{padding:0 3%;}

@@ -48,14 +48,35 @@
 <script src="js/md5.min.js"></script>
 <script>
 $(function (){
+	function lodeUserInfo(){
+		if(user!=null && user.username != null){
+			$(".loginbg").find(".login-button").attr("type","loginout").children("span").html("退出");
+			$(".loginbg").find(".form").html('<p>'+user.username+'：</p><p style="text-indent:3em;">欢迎您！</p>')
+		}
+	}
+	lodeUserInfo();
 	function keydownFn(e) {
 		if(e.which===13){
-			console.log("回车登录");
+			var $username=$("input[name='username']");
+			var $password=$("input[name='password']");
+			if($.trim($username.val())==""){
+				$username.focus();
+				return false;
+			}
+			if($.trim($password.val())==""){
+				$password.focus();
+				return false;
+			}
+			$(".login-button").click();
 		}
 	}
 	var $form = document.getElementsByName("login")[0];
 	$form.addEventListener('keydown', keydownFn);
 	$(".login-button").click(function (){
+		if($(this).attr("type")=="loginout"){//退出登录
+			
+			return false;
+		}
 		var username=$.trim($("input[name='username']").val());
 		var password=$.trim($("input[name='password']").val());
 		if(username==""){
@@ -73,9 +94,19 @@ $(function (){
             url:"/inf/userLogin",
             data:option,
             dataType:"json",
-            error:function (error){console.error(error);},
+            error:function (error){
+				var errormsg='登录接口出现错误，请您稍后重试'
+				dialogMessage("登录",errormsg);},
             success:function (data){
-            	
+				//data.data={"username":"用户名称","rights":"用户权限代码" };//001：管理员 ;002：添加，删除，编辑、查看;003:查看 
+				
+            	if(data.status==200){
+					window.user=data.data;
+					lodeUserInfo();
+				}else{
+					var errormsg=data.error || '登录出现错误，请您重试'
+					dialogMessage("登录",errormsg);
+				}
             }
         });
 	});

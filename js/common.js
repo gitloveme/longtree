@@ -107,14 +107,34 @@ function returnPagehtml(num,totalcount,pagesize){
 }
 $(function (){
     /*判断用户是否登录/inf/isUserLogin*/
+	$.ajax({
+		type:"get",
+		url:"/inf/isUserLogin",
+		data:{},
+		dataType:"json",
+		error:function (error){/*location.href="/index.html";*/},
+		success:function (data){
+			data.data={"username":"用户名称","rights":"用户权限代码" };//001：管理员 ;002：添加，删除，编辑、查看;003:查看 
 
+			if(data.status==200){
+				window.user=data.data;
+			}else{
+				//location.href="/index.html";
+			}
+		}
+	});
     var commonDom=$(".commonbox");
     var commonNav=commonDom.find(".nav");
     commonNav.find("li").click(function (){
         location.href=$(this).attr("link");
     });
     
-
+	/*倒序*/
+	$(".copytable").delegate(".arrow-s","click",function (){
+		$(".autoscroll").find("tr").each(function (){
+			$(this).prependTo($(this).parents(".autoscroll").find("table"));
+		});
+	});
     function setWidnowSize(){
         var windowWidth=$(window).width();
         var windowHeight=$(window).height();

@@ -116,216 +116,410 @@ function getBoundary(name){
     });
 }
 /*添加树木*/
-var treeLayer;
-function addTreeTileLayer(){
-    if(treeLayer) map.removeTileLayer(treeLayer);//先移除 
-    treeLayer = new BMap.TileLayer({isTransparentPng: true});  // 创建地图层实例 
-    treeLayer.getTilesUrl = function(tileCoord, zoom) {
-        var PointConvert = new BaiduPointConvert(map);//百度坐标转换类  
-        var lonlat_0 = PointConvert.tileToLngLat(tileCoord);//百度区块左下角经纬度  
-        var tileCoord2 = new Object();  
-        tileCoord2.x = x + 1;  
-        tileCoord2.y = y + 1;  
-        var lonlat2_0 = PointConvert.tileToLngLat(tileCoord2);//百度区块右下角经纬度  
-        var lonlat_1=BD2GCJ(lonlat_0.lng, lonlat_0.lat);//百度转gcj  
-        var lonlat2_1 = BD2GCJ(lonlat2_0.lng, lonlat2_0.lat);//百度转gcj  
-        var lonlat = GCJ2WGS(lonlat_1.lng, lonlat_1.lat);//gcj转wgs  
-        var lonlat2 = GCJ2WGS(lonlat2_1.lng, lonlat2_1.lat);//gcj转wgs  
-        var worldCoordinate14 = lonLat2Mercator(lonlat);//转平面坐标  
-        var worldCoordinate24 = lonLat2Mercator(lonlat2);//转平面坐标  
-        var url= "*/MapServer/export?bbox=" + worldCoordinate14.x+ "%2C" + worldCoordinate14.y + "%2C"   
-        + worldCoordinate24.x + "%2C" + worldCoordinate24.y  
-        +"&bboxSR=102100&layers=&layerDefs=&size=256%2C256&imageSR=102100&format=png&transparent=true&dpi=&time=&layerTimeOptions=&dynamicLayers=&gdbVersion=&mapScale=&f=image";  
-      return url;//图片 通过arcgis server返回，后期可以把图片下载下来后就抛弃server，然后以瓦片x，y，z命名  
-
-    };      
-    map.addTileLayer(treeLayer);
-}
-function addOverlayTree(op){
-    var option=$.extend({page_index:1,page_num:50},op);
-    $.ajax({
-        type:"get",
-        url:"/inf/getLocation",
-        data:option,
-        dataType:"json",
-        error:function (error){console.error("获取位置信息出错")},
-        success:function (data){
-            var baiduData=data.data;
-            var sentString='';
-            for(var i=0;i<baiduData.length;i++){
-                if(i==baiduData.length-1){
-                    sentString+=baiduData[i].X+","+baiduData[i].Y;
-                }else{
-                    sentString+=baiduData[i].X+","+baiduData[i].Y+";";
-                }
-                
-            }
-            $.ajax({
-                type:"get",
-                url:"http://api.map.baidu.com/geoconv/v1/",
-                data:{coords:sentString,ak:"2lekLZRu8XcblvoAMksUK3qmGnISyCSP"},
-                dataType:"jsonp",
-                success:function (bddata){
-                    if(bddata.status !=0) return false;
-                    var arry=bddata.result;    
-                    if(arry.length==0) return false;
-                    var myIcon = new BMap.Icon("http://123.56.168.10/images/tree3.png", new BMap.Size(24,24));
-                    for(var i=0;i<arry.length;i++){
-                        var point = new BMap.Point(arry[i].x,arry[i].y);
-                        var marker = new BMap.Marker(point,{icon:myIcon});
-                        map.addOverlay(marker);
-                        var NO=baiduData[i].NO || 0;
-                        var sContent ='<div class="window" style="display:block;position:relative;"><div class="close-window">×</div>'+
-                                '<img src="http://123.56.168.10/images/tree-des-1.jpg" class="treeimg" alt="油松">'+
-                                '<div class="btn-more">'+
-                                    '<em class="icon ico-eye"></em><a>查看详情</a>'+
-                                '</div>'+
-                                '<div class="icon ico-arrow" style="left:157px;"></div>'+
-                                '<p class="treeno">NO.'+NO+'</p>'+
-                                '<div class="treedes">'+
-                                    '<h3>油松</h3>'+
-                                    '<p class="des-en">Pinus tabuliformis Carrière</p>'+
-                                    '<p class="des-cn"><em class="icon ico-ori"></em>沙河镇G6高速路以东运河沿岸</p>'+
-                                '</div>'+
-                            '</div>';
-                        addClickHandler(sContent,marker);
-                    }
-                    function addClickHandler(content,marker){
-                        marker.addEventListener("click",function(e){
-                            openInfoWindow(content,e,this)}
-                        );
-                    }
-                    function openInfoWindow(content,e,that){
-                        var opts = {
-                               // title  : "昌平园林绿化局",      //标题
-                                width  : 390,//自动加了10像素             //宽度
-                                height : 325,              //高度
-                                panel  : "panel",         //检索结果面板
-                                enableAutoPan : true,     //自动平移
-                                enableSendToPhone:false,
-                                searchTypes   :[
-                                    /*BMAPLIB_TAB_SEARCH,   //周边检索
-                                    BMAPLIB_TAB_TO_HERE,  //到这里去
-                                    BMAPLIB_TAB_FROM_HERE //从这里出发*/
-                                ]
-                            }
-                            var searchInfoWindow = new BMapLib.SearchInfoWindow(map,content,opts);  // 创建信息窗口对象
-                            searchInfoWindow.open(that);
-                            $(".close-window").unbind("click").click(function (){
-                                searchInfoWindow.close(that);
-                                $(this).parents(".window-detail").hide();
-                            }).siblings(".btn-more").unbind("click").click(function (){
-                                searchInfoWindow.close(that);
-                                $(".window-detail").show();
-                            });
-                    }
-                }
-            })
-
-            
-        }
-    });    
-    
+//var treeLayer;
+//function addTreeTileLayer(){
+//    if(treeLayer) map.removeTileLayer(treeLayer);//先移除 
+//    treeLayer = new BMap.TileLayer({isTransparentPng: true});  // 创建地图层实例 
+//    treeLayer.getTilesUrl = function(tileCoord, zoom) {
+//        var PointConvert = new BaiduPointConvert(map);//百度坐标转换类  
+//        var lonlat_0 = PointConvert.tileToLngLat(tileCoord);//百度区块左下角经纬度  
+//        var tileCoord2 = new Object();  
+//        tileCoord2.x = x + 1;  
+//        tileCoord2.y = y + 1;  
+//        var lonlat2_0 = PointConvert.tileToLngLat(tileCoord2);//百度区块右下角经纬度  
+//        var lonlat_1=BD2GCJ(lonlat_0.lng, lonlat_0.lat);//百度转gcj  
+//        var lonlat2_1 = BD2GCJ(lonlat2_0.lng, lonlat2_0.lat);//百度转gcj  
+//        var lonlat = GCJ2WGS(lonlat_1.lng, lonlat_1.lat);//gcj转wgs  
+//        var lonlat2 = GCJ2WGS(lonlat2_1.lng, lonlat2_1.lat);//gcj转wgs  
+//        var worldCoordinate14 = lonLat2Mercator(lonlat);//转平面坐标  
+//        var worldCoordinate24 = lonLat2Mercator(lonlat2);//转平面坐标  
+//        var url= "*/MapServer/export?bbox=" + worldCoordinate14.x+ "%2C" + worldCoordinate14.y + "%2C"   
+//        + worldCoordinate24.x + "%2C" + worldCoordinate24.y  
+//        +"&bboxSR=102100&layers=&layerDefs=&size=256%2C256&imageSR=102100&format=png&transparent=true&dpi=&time=&layerTimeOptions=&dynamicLayers=&gdbVersion=&mapScale=&f=image";  
+//      return url;//图片 通过arcgis server返回，后期可以把图片下载下来后就抛弃server，然后以瓦片x，y，z命名  
+//
+//    };      
+//    map.addTileLayer(treeLayer);
+//}
+//function addOverlayTree(op){
+//    var option=$.extend({page_index:1,page_num:50},op);
+//    $.ajax({
+//        type:"get",
+//        url:"/inf/getLocation",
+//        data:option,
+//        dataType:"json",
+//        error:function (error){console.error("获取位置信息出错")},
+//        success:function (data){
+//            var baiduData=data.data;
+//            var sentString='';
+//            for(var i=0;i<baiduData.length;i++){
+//                if(i==baiduData.length-1){
+//                    sentString+=baiduData[i].X+","+baiduData[i].Y;
+//                }else{
+//                    sentString+=baiduData[i].X+","+baiduData[i].Y+";";
+//                }
+//                
+//            }
+//            $.ajax({
+//                type:"get",
+//                url:"http://api.map.baidu.com/geoconv/v1/",
+//                data:{coords:sentString,ak:"2lekLZRu8XcblvoAMksUK3qmGnISyCSP"},
+//                dataType:"jsonp",
+//                success:function (bddata){
+//                    if(bddata.status !=0) return false;
+//                    var arry=bddata.result;    
+//                    if(arry.length==0) return false;
+//                    var myIcon = new BMap.Icon("http://123.56.168.10/images/tree3.png", new BMap.Size(24,24));
+//                    for(var i=0;i<arry.length;i++){
+//                        var point = new BMap.Point(arry[i].x,arry[i].y);
+//                        var marker = new BMap.Marker(point,{icon:myIcon});
+//                        map.addOverlay(marker);
+//                        var NO=baiduData[i].NO || 0;
+//                        var sContent ='<div class="window" style="display:block;position:relative;"><div class="close-window">×</div>'+
+//                                '<img src="http://123.56.168.10/images/tree-des-1.jpg" class="treeimg" alt="油松">'+
+//                                '<div class="btn-more">'+
+//                                    '<em class="icon ico-eye"></em><a>查看详情</a>'+
+//                                '</div>'+
+//                                '<div class="icon ico-arrow" style="left:157px;"></div>'+
+//                                '<p class="treeno">NO.'+NO+'</p>'+
+//                                '<div class="treedes">'+
+//                                    '<h3>油松</h3>'+
+//                                    '<p class="des-en">Pinus tabuliformis Carrière</p>'+
+//                                    '<p class="des-cn"><em class="icon ico-ori"></em>沙河镇G6高速路以东运河沿岸</p>'+
+//                                '</div>'+
+//                            '</div>';
+//                        addClickHandler(sContent,marker);
+//                    }
+//                    function addClickHandler(content,marker){
+//                        marker.addEventListener("click",function(e){
+//                            openInfoWindow(content,e,this)}
+//                        );
+//                    }
+//                    function openInfoWindow(content,e,that){
+//                        var opts = {
+//                               // title  : "昌平园林绿化局",      //标题
+//                                width  : 390,//自动加了10像素             //宽度
+//                                height : 325,              //高度
+//                                panel  : "panel",         //检索结果面板
+//                                enableAutoPan : true,     //自动平移
+//                                enableSendToPhone:false,
+//                                searchTypes   :[
+//                                    /*BMAPLIB_TAB_SEARCH,   //周边检索
+//                                    BMAPLIB_TAB_TO_HERE,  //到这里去
+//                                    BMAPLIB_TAB_FROM_HERE //从这里出发*/
+//                                ]
+//                            }
+//                            var searchInfoWindow = new BMapLib.SearchInfoWindow(map,content,opts);  // 创建信息窗口对象
+//                            searchInfoWindow.open(that);
+//                            $(".close-window").unbind("click").click(function (){
+//                                searchInfoWindow.close(that);
+//                                $(this).parents(".window-detail").hide();
+//                            }).siblings(".btn-more").unbind("click").click(function (){
+//                                searchInfoWindow.close(that);
+//                                $(".window-detail").show();
+//                            });
+//                    }
+//                }
+//            })
+//
+//            
+//        }
+//    });    
+//    
+//}
+/*获取古树详细信息*/
+function lodeTreeDetail(nubmer){
+	$.ajax({
+		"type":"get",
+		url:"/inf/getTree",
+		data:{NO:nubmer},
+		dataType:"jsonp",
+		error:function (error){
+			dialogMessage("古树详情","很抱歉暂时无法查看古树详情，请您稍后重试");
+		},
+		success:function (data){
+			if(data.status==200){
+				/*{"X":"X坐标","Y":"Y坐标","NO":"古树编号","picture":"多个url用逗号分隔","county":"区县","quotation":"原挂牌号","feature_no":"特征代码","tree_seed":"树种"，"grade":"等级"，"estimation_age":"估测树龄","real_age":"真实树龄","higth":"树高","chest":"胸围","feature":"特点","growth_vigor":"生长势","growth_enviro":"生长环境","town":"乡镇","villiage":"村","small_place":"小地名","product_place":"生长场所","exist_state":"现存状态","survey_no":"调查号","altitude":"海拔","aver_crown":"平均冠幅","east_crown":"东西冠幅","south_crown":"南北冠幅","manage_com":"管护单位","manage_people":"管护人"，*/
+				var obj=data.data;
+				var images=obj.picture.split(",");
+				var windowDom=$(".window-detail");
+				var imgDom='';
+				var imglen=images.length;
+				if(imglen<1){//暂无照片
+					imgDom+='<img src="/images/notree.jpg" class="curr-img">';
+				}else if(imglen==1){
+					imgDom+='<img src="'+images[0]+'" class="curr-img">';
+				}else if(imglen==2){
+					imgDom+='<img src="'+images[0]+'" class="pre-img">';
+					imgDom+='<img src="'+images[1]+'" class="curr-img">';
+				}else{
+					for(var i=0;i<imglen;i++){
+						if(i==0){
+							imgDom+='<img src="'+images[i]+'" class="pre-img">';
+						}else if(i==1){
+							imgDom+='<img src="'+images[i]+'" class="curr-img">';
+						}else if(i==2){
+							imgDom+='<img src="'+images[i]+'" class="next-img">';
+						}else{
+							imgDom+='<img src="'+images[i]+'">';
+						}
+					}
+				}
+				
+				windowDom.find(".change-box").html(imgDom);
+				
+				windowDom.find(".treeno").html("NO."+obj.NO).sibling(".treedes").find(".des-en").html(obj.small_place).siblings(".des-cn").html('<em class="icon ico-ori"></em>'+obj.product_place);
+				
+				var introhtml='<ul class="clear">'+
+									'<li>原挂牌号：'+obj.quotation+'</li>'+
+									'<li>特征代码：'+obj.feature_no+'</li>'+
+									'<li>所属区县：'+obj.county+'</li>'+
+									'<li>古树等级：'+obj.grade+'</li>'+
+									'<li>树种：'+obj.tree_seed+'</li>'+
+									'<li>估测树龄：'+obj.estimation_age年+'</li>'+
+									'<li>真实树龄：'+obj.real_age年+'</li>'+
+									'<li>树高：'+obj.higth米+'</li>'+
+									'<li>胸径(主蔓径)：'+obj.chest厘米+'</li>'+
+									'<li>生长势：'+obj.growth_vigor+'</li>'+
+									'<li>生长环境：'+obj.growth_enviro+'</li>'+
+									'<li>特点：'+obj.feature+'</li>'+
+								'</ul>'+
+								'<div class="tree-type"><span class="before"></span><span class="tree-title">位置</span><span class="after"></span></div>'+
+								'<ul class="clear">'+
+									'<li>乡镇：'+obj.town+'</li>'+
+									'<li>村(居委会)：'+obj.villiage+'</li>'+
+									'<li>小地名：'+obj.small_place+'</li>'+
+									'<li>生长场所：'+obj.product_place+'</li>'+
+									'<li>现存状态：'+obj.exist_state+'</li>'+
+									'<li>调查号：'+obj.survey_no+'</li>'+
+									'<li>海拔：'+obj.altitude+'</li>'+
+								'</ul>'+
+								'<div class="tree-type"><span class="before"></span><span class="tree-title">树冠</span><span class="after"></span></div>'+
+								'<ul class="clear">'+
+									'<li>东西树冠：'+obj.east_crown+'</li>'+
+									'<li>南北树冠：'+obj.south_crown+'</li>'+
+									'<li>平均树冠：'+obj.aver_crown+'</li>'+
+								'</ul>'+
+								'<div class="tree-type"><span class="before"></span><span class="tree-title">管护</span><span class="after"></span></div>'+
+								'<ul class="clear">'+
+									'<li>管护单位：'+obj.manage_com+'</li>'+
+									'<li>管护人：'+obj.manage_people+'</li>'+
+								'</ul>';
+				windowDom.show().find(".tree-intro").empty().html(introhtml);
+				
+			}else{
+				var errormsg=data.error || "很抱歉暂时无法查看古树详情，请您稍后重试";
+				dialogMessage("古树详情",errormsg);
+			}
+		}
+	});
 }
 //打开窗口
 
 var searchList=$(".search-list");
-function loadSearchData(){
+var lodeUrl='/inf/getLocation';
+function loadSearchData(op){
+	var option=$.extend({page_index:1,page_num:50},op);
     $.ajax({
         type:"get",
-        url:"/inf/getLocation",
-        data:{},
+        url:lodeUrl,
+        data:option,
         dataType:"json",
         error:function (error){console.error("获取信息出错")},
         success:function (data){
-            if(data && data.status == 200){
+			/*data={"status":"","error":"",
+				  "data":[{
+						"X":"X坐标",
+						"Y":"Y坐标",
+						"NO":"古树编号",
+						"quotation":"原挂牌号",
+						"survey_no":"调查号",
+						"tree_seed":"树种",
+						"town":"乡镇",
+						"small_place":"小地名"
+						"create_time":"录入时间",
+						"state":"审核状态"
+						}]
+				 }*/
+
+			if(data && data.status == 200){
                 var arry=data.data || [];
                 if(arry.length<1) return false;
-                var table='';
+                var table='<table>';
                 for(var i=0;i<arry.length;i++){
-                    var postNum=arry[i].NO || "树木编号";
-                    var treeAdress=arry[i].adress || "树木归属地区";
-                    var treeType=arry[i].type || "银杏";
+                    var NO=arry[i].NO || "树木编号";
+                    var treeAdress=arry[i].town || "-";
+                    var treeName=arry[i].tree_seed || "-";
                     var lng=arry[i].X || 0;
                     var lat=arry[i].Y || 0;
-                    table+='<tr lng="'+lng+'" lat="'+lat+'" postnum="'+postNum+'">'+
-                               '<td>'+postNum+'</td>'+
+                    table+='<tr lng="'+lng+'" lat="'+lat+'" postnum="'+postNum+'" type="'+treeName+'" address="'+treeAdress+'">'+
+                               '<td style="width:12em;">'+NO+'</td>'+
                                '<td>'+treeAdress+'</td>'+
-                               '<td>'+treeType+'</td>'
+                               '<td style="width:8em;">'+treeName+'</td>'
                             '</tr>';
+					
+					////////
+					var iconUrl="http://123.56.168.10/images/tree3.png";
+					switch(treeName){
+						case "侧柏":
+							iconUrl="http://123.56.168.10/images/tree3.png";
+							break;
+						case "水杉":
+							iconUrl="http://123.56.168.10/images/tree1.png";
+							break;
+						case "皂角":
+							iconUrl="http://123.56.168.10/images/tree2.png";
+							break;
+						case "白玉兰":
+							iconUrl="http://123.56.168.10/images/tree4.png";
+							break;
+						default:
+							iconUrl="http://123.56.168.10/images/tree3.png";
+							break;
+					}
+					var myIcon = new BMap.Icon(iconUrl, new BMap.Size(24,24));
+					var point = new BMap.Point(lng,lat);
+					var marker = new BMap.Marker(point,{icon:myIcon});
+					map.addOverlay(marker);
+					var NO=baiduData[i].NO || 0;
+					var sContent ='<div class="window" style="display:block;position:relative;"><div class="close-window">×</div>'+
+							'<img src="http://123.56.168.10/images/tree-des-1.jpg" class="treeimg" alt="'+treeName+'">'+
+							'<div class="btn-more"  number="'+NO+'">'+
+								'<em class="icon ico-eye"></em><a>查看详情</a>'+
+							'</div>'+
+							'<div class="icon ico-arrow" style="left:157px;"></div>'+
+							'<p class="treeno">NO.'+NO+'</p>'+
+							'<div class="treedes">'+
+								'<h3>'+treeName+'</h3>'+
+								'<p class="des-en">Pinus tabuliformis Carrière</p>'+
+								'<p class="des-cn"><em class="icon ico-ori"></em>'+treeAdress+'</p>'+
+							'</div>'+
+						'</div>';
+					addClickHandler(sContent,marker);
                 }
-                var th='<tr><th>编号<em class="icon arrow-s"></em></th><th>地区</th><th style="padding-right:6px;">树种</th></tr>';
-                var copytable='<table>'+th+table+'</table>';
-                var scrolltable='<table>'+table+'</table>';
-                
-                searchList.show().find(".copytable").empty().html(copytable).siblings(".autoscroll").empty().html(scrolltable).delegate("tr","click",function (){
-                    $(this).addClass("active").siblings("tr").removeClass("active");
-                    var coords=$(this).attr("lng")+","+$(this).attr("lat");
-                    var NO=$(this).attr("postnum");
-                    $.ajax({
-                        type:"get",
-                        url:"http://api.map.baidu.com/geoconv/v1/",
-                        data:{coords:coords,ak:"2lekLZRu8XcblvoAMksUK3qmGnISyCSP"},
-                        dataType:"jsonp",
-                        success:function (bddata){
-                            if(bddata.status !=0) return false;
-                            var arry=bddata.result;    
-                            if(arry.length==0) return false;
-                            var point = new BMap.Point(arry[0].x,arry[0].y);
-                            map.centerAndZoom(point, 18);
-                            var sContent ='<div class="window" style="display:block;position:relative;"><div class="close-window">×</div>'+
-                                '<img src="http://123.56.168.10/images/tree-des-1.jpg" class="treeimg" alt="油松">'+
-                                '<div class="btn-more">'+
-                                    '<em class="icon ico-eye"></em><a>查看详情</a>'+
-                                '</div>'+
-                                '<div class="icon ico-arrow" style="left:157px;"></div>'+
-                                '<p class="treeno">NO.'+NO+'</p>'+
-                                '<div class="treedes">'+
-                                    '<h3>油松</h3>'+
-                                    '<p class="des-en">Pinus tabuliformis Carrière</p>'+
-                                    '<p class="des-cn"><em class="icon ico-ori"></em>沙河镇G6高速路以东运河沿岸</p>'+
-                                '</div>'+
-                            '</div>';
-                            var opts = {
-                               // title  : "昌平园林绿化局",      //标题
-                                width  : 390,//自动加了10像素             //宽度
-                                height : 325,              //高度
-                                panel  : "panel",         //检索结果面板
-                                enableAutoPan : true,     //自动平移
-                                enableSendToPhone:false,
-                                searchTypes   :[
-                                    /*BMAPLIB_TAB_SEARCH,   //周边检索
-                                    BMAPLIB_TAB_TO_HERE,  //到这里去
-                                    BMAPLIB_TAB_FROM_HERE //从这里出发*/
-                                ]
-                            }
-                            var searchInfoWindow = new BMapLib.SearchInfoWindow(map,sContent,opts);  // 创建信息窗口对象
-                            searchInfoWindow.open(point);
-                            $(".close-window").unbind("click").click(function (){
-                                searchInfoWindow.close(point);
-                                $(this).parents(".window-detail").hide();
-                            }).siblings(".btn-more").unbind("click").click(function (){
-                                searchInfoWindow.close(point);
-                                $(".window-detail").show();
-                            });;
-                        }
-                    });
-                });
-            }
+				table+='</table>';
+                var totalcount=data.records || 0;
+                var pagehtml=returnPagehtml(option.page_index,totalcount,option.page_num);
+				
+				searchList.find(".pagenumber").empty().html(pagehtml).delegate("a","click",function (){
+					var t=$(this);
+					if(t.hasClass("now") || t.hasClass("last")) return false;
+					var number=t.attr("page");
+					if(lodeUrl.indexOf("/inf/searchTree")!=-1){//搜索后翻页
+						var keyword=$.trim($(".searchvalue").val());
+						if(keyword==""){
+							dialogMessage("搜索","搜索内容不能为空");
+						}
+						var option={keyword:keyword,page_index:number};
+						loadSearchData(option);
+					}else{
+						loadSearchData({page_index:number,type:2});
+					}
+					
+				});
+                searchList.show().find(".autoscroll").empty().html(table).delegate("tr","click",function (){
+					var that=$(this);
+                    that.addClass("active").siblings("tr").removeClass("active");
+					
+					var coordX=that.attr("lng");
+					var coordY=that.attr("lat");
+                    var NO=that.attr("postnum");
+					var treeName=that.attr("type");
+					var treeAddress=that.attr("address");
+                   //////
+					var point = new BMap.Point(coordX,coordY);
+					map.centerAndZoom(point, 18);
+					var sContent ='<div class="window" style="display:block;position:relative;"><div class="close-window">×</div>'+
+						'<img src="http://123.56.168.10/images/tree-des-1.jpg" class="treeimg" alt="'+treeName+'">'+
+						'<div class="btn-more" number="'+NO+'">'+
+							'<em class="icon ico-eye"></em><a>查看详情</a>'+
+						'</div>'+
+						'<div class="icon ico-arrow" style="left:157px;"></div>'+
+						'<p class="treeno">NO.'+NO+'</p>'+
+						'<div class="treedes">'+
+							'<h3>'+treeName+'</h3>'+
+							'<p class="des-en">Pinus tabuliformis Carrière</p>'+
+							'<p class="des-cn"><em class="icon ico-ori"></em>'+treeAddress+'</p>'+
+						'</div>'+
+					'</div>';
+					var opts = {
+					   // title  : "昌平园林绿化局",      //标题
+						width  : 390,//自动加了10像素             //宽度
+						height : 325,              //高度
+						panel  : "panel",         //检索结果面板
+						enableAutoPan : true,     //自动平移
+						enableSendToPhone:false,
+						searchTypes   :[
+							/*BMAPLIB_TAB_SEARCH,   //周边检索
+							BMAPLIB_TAB_TO_HERE,  //到这里去
+							BMAPLIB_TAB_FROM_HERE //从这里出发*/
+						]
+					}
+					var searchInfoWindow = new BMapLib.SearchInfoWindow(map,sContent,opts);  // 创建信息窗口对象
+					searchInfoWindow.open(point);
+					$(".close-window").unbind("click").click(function (){
+						searchInfoWindow.close(point);
+						$(this).parents(".window-detail").hide();
+					}).siblings(".btn-more").unbind("click").click(function (){
+						searchInfoWindow.close(point);
+						lodeTreeDetail($(this).attr("number"));
+						//$(".window-detail").show();
+					});
+				});
+				function addClickHandler(content,marker){
+					marker.addEventListener("click",function(e){
+						openInfoWindow(content,e,this)}
+					);
+				}
+				function openInfoWindow(content,e,that){
+					var opts = {
+						   // title  : "昌平园林绿化局",      //标题
+							width  : 390,//自动加了10像素             //宽度
+							height : 325,              //高度
+							panel  : "panel",         //检索结果面板
+							enableAutoPan : true,     //自动平移
+							enableSendToPhone:false,
+							searchTypes   :[
+								/*BMAPLIB_TAB_SEARCH,   //周边检索
+								BMAPLIB_TAB_TO_HERE,  //到这里去
+								BMAPLIB_TAB_FROM_HERE //从这里出发*/
+							]
+						}
+						var searchInfoWindow = new BMapLib.SearchInfoWindow(map,content,opts);  // 创建信息窗口对象
+						searchInfoWindow.open(that);
+						$(".close-window").unbind("click").click(function (){
+							searchInfoWindow.close(that);
+							$(this).parents(".window-detail").hide();
+						}).siblings(".btn-more").unbind("click").click(function (){
+							searchInfoWindow.close(that);
+							lodeTreeDetail($(this).attr("number"));
+							//$(".window-detail").show();
+						});
+				}
+            }else{
+				var errormsg=data.error || '登录出现错误，请您重试'
+					dialogMessage("古树信息",errormsg);
+			}
         }
-    })
+    });
 }
-$(".window").find(".btn-more").click(function (){
-
+$(".submit-search").click(function (){
+	lodeUrl='/inf/searchTree';
+	var keyword=$.trim($(".searchvalue").val());
+	if(keyword==""){
+		dialogMessage("搜索","搜索内容不能为空");
+	}
+	var option={keyword:keyword};
+	loadSearchData(option);
+}).sibling(".searchvalue").keydown(function (e){
+	if(e.which===13){
+		$(this).siblings(".submit-search").click();
+	}
 });
 function init(){
     getBoundary("昌平区");
-    loadSearchData();
+    loadSearchData({type:2});
     //addTreeTileLayer();
-    addOverlayTree();
+    //addOverlayTree();
 }
 init();
-
-$(function (){
-    var data={"footer":null,"rows":[{"objectid1":1,"treeimage":"2015-7-16\/DSC_0181.JPG;2015-7-16\/DSC_0182.JPG;2015-7-16\/DSC_0183.JPG;","sh":"3","abscisa":116.30619963,"pointx":116.30619963,"pointy":39.93356950,"ordinate":39.93356950,"subplace":"北洼路老街7号-八里庄小学","currState":"正常","treeno":"","townid":"八里庄","clafcation":"2","respunits":"八庄里小学","specie":"侧柏","treeid":"11010800591","oldno":""},{"objectid1":2,"treeimage":"2015-7-16\/DSC_0178.JPG;2015-7-16\/DSC_0179.JPG;2015-7-16\/DSC_0180.JPG;","sh":"3","abscisa":116.30620671,"pointx":116.30620671,"pointy":39.93369932,"ordinate":39.93369932,"subplace":"北洼路老街7号-八里庄小学","currState":"正常","treeno":"","townid":"八里庄","clafcation":"2","respunits":"八庄里小学","specie":"侧柏","treeid":"11010800592","oldno":""},{"objectid1":3,"treeimage":"2015-7-16\/DSC_0188.JPG;2015-7-16\/DSC_0189.JPG;","sh":"3","abscisa":116.30668319,"pointx":116.30668319,"pointy":39.93369968,"ordinate":39.93369968,"subplace":"北洼路老街7号-八里庄小学","currState":"正常","treeno":"","townid":"八里庄","clafcation":"2","respunits":"八庄里小学","specie":"侧柏","treeid":"11010800593","oldno":""},{"objectid1":4,"treeimage":"2015-7-16\/DSC_0175.JPG;2015-7-16\/DSC_0176.JPG;2015-7-16\/DSC_0177.JPG;","sh":"3","abscisa":116.30643036,"pointx":116.30643036,"pointy":39.93363125,"ordinate":39.93363125,"subplace":"北洼路老街7号-八里庄小学","currState":"正常","treeno":"","townid":"八里庄","clafcation":"2","respunits":"八庄里小学","specie":"侧柏","treeid":"11010800594","oldno":""},{"objectid1":5,"treeimage":"2015-7-16\/DSC_0357.JPG;2015-7-16\/DSC_0358.JPG;","sh":"3","abscisa":116.28981650,"pointx":116.28981650,"pointy":39.93542739,"ordinate":39.93542739,"subplace":"21世纪实验中学-外教楼北侧","currState":"正常","treeno":"","townid":"八里庄","clafcation":"2","respunits":"21世纪中学","specie":"侧柏","treeid":"11010800596","oldno":""},{"objectid1":6,"treeimage":"2015-7-16\/DSC_0354.JPG;2015-7-16\/DSC_0355.JPG;","sh":"3","abscisa":116.28976246,"pointx":116.28976246,"pointy":39.93546961,"ordinate":39.93546961,"subplace":"21世纪实验中学-外教楼北侧","currState":"正常","treeno":"","townid":"八里庄","clafcation":"2","respunits":"21世纪中学","specie":"侧柏","treeid":"11010800597","oldno":""},{"objectid1":7,"treeimage":"2015-7-16\/DSC_0289.JPG;2015-7-16\/DSC_0290.JPG;2015-7-16\/DSC_0291.JPG;","sh":"3","abscisa":116.28975540,"pointx":116.28975540,"pointy":39.93549160,"ordinate":39.93549160,"subplace":"21世纪实验中学-外教楼北侧","currState":"正常","treeno":"","townid":"八里庄","clafcation":"2","respunits":"21世纪中学","specie":"侧柏","treeid":"11010800598","oldno":""},{"objectid1":8,"treeimage":"2015-7-16\/DSC_0360.JPG;2015-7-16\/DSC_0361.JPG;","sh":"3","abscisa":116.28985452,"pointx":116.28985452,"pointy":39.93544218,"ordinate":39.93544218,"subplace":"21世纪实验中学-外教楼北侧","currState":"正常","treeno":"","townid":"八里庄","clafcation":"2","respunits":"21世纪中学","specie":"侧柏","treeid":"11010800599","oldno":""},{"objectid1":9,"treeimage":"2015-7-16\/DSC_0310.JPG;2015-7-16\/DSC_0311.JPG;2015-7-16\/DSC_0312.JPG;","sh":"3","abscisa":116.28968641,"pointx":116.28968641,"pointy":39.93575142,"ordinate":39.93575142,"subplace":"21世纪实验中学-外教楼北侧","currState":"正常","treeno":"","townid":"八里庄","clafcation":"2","respunits":"21世纪中学","specie":"侧柏","treeid":"11010800600","oldno":""},{"objectid1":10,"treeimage":"2015-7-16\/DSC_0363.JPG;2015-7-16\/DSC_0364.JPG;","sh":"3","abscisa":116.28983958,"pointx":116.28983958,"pointy":39.93550733,"ordinate":39.93550733,"subplace":"21世纪实验中学-外教楼北侧","currState":"正常","treeno":"","townid":"八里庄","clafcation":"2","respunits":"21世纪中学","specie":"侧柏","treeid":"11010800601","oldno":""},{"objectid1":11,"treeimage":"2015-7-16\/DSC_0369.JPG;2015-7-16\/DSC_0370.JPG;","sh":"3","abscisa":116.28974752,"pointx":116.28974752,"pointy":39.93556053,"ordinate":39.93556053,"subplace":"21世纪实验中学-外教楼北侧","currState":"正常","treeno":"","townid":"八里庄","clafcation":"2","respunits":"21世纪中学","specie":"侧柏","treeid":"11010800602","oldno":""},{"objectid1":12,"treeimage":"2015-7-16\/DSC_0366.JPG;2015-7-16\/DSC_0367.JPG;","sh":"3","abscisa":116.28986267,"pointx":116.28986267,"pointy":39.93554523,"ordinate":39.93554523,"subplace":"21世纪实验中学-外教楼北侧","currState":"正常","treeno":"","townid":"八里庄","clafcation":"2","respunits":"21世纪中学","specie":"侧柏","treeid":"11010800603","oldno":""},{"objectid1":13,"treeimage":"2015-7-16\/DSC_0298.JPG;2015-7-16\/DSC_0299.JPG;2015-7-16\/DSC_0300.JPG;","sh":"3","abscisa":116.28955607,"pointx":116.28955607,"pointy":39.93561484,"ordinate":39.93561484,"subplace":"21世纪实验中学-外教楼后院","currState":"正常","treeno":"","townid":"八里庄","clafcation":"2","respunits":"21世纪中学","specie":"侧柏","treeid":"11010800604","oldno":""},{"objectid1":14,"treeimage":"2015-7-16\/DSC_0396.JPG;2015-7-16\/DSC_0397.JPG;","sh":"3","abscisa":116.29026762,"pointx":116.29026762,"pointy":39.93539896,"ordinate":39.93539896,"subplace":"21世纪实验中学-小青楼南侧","currState":"正常","treeno":"","townid":"八里庄","clafcation":"2","respunits":"21世纪中学","specie":"楸树","treeid":"11010800605","oldno":""},{"objectid1":15,"treeimage":"2015-7-16\/DSC_0466.JPG;2015-7-16\/DSC_0467.JPG;","sh":"3","abscisa":116.28806641,"pointx":116.28806641,"pointy":39.93649802,"ordinate":39.93649802,"subplace":"亮甲店1号人民政协报院内","currState":"正常","treeno":"","townid":"八里庄","clafcation":"2","respunits":"政协报社","specie":"侧柏","treeid":"11010800606","oldno":""},{"objectid1":16,"treeimage":"2015-7-16\/DSC_0375.JPG;2015-7-16\/DSC_0376.JPG;","sh":"3","abscisa":116.28987786,"pointx":116.28987786,"pointy":39.93603726,"ordinate":39.93603726,"subplace":"21世纪实验中学-外教楼北侧","currState":"正常","treeno":"","townid":"八里庄","clafcation":"2","respunits":"总后干休所","specie":"国槐","treeid":"11010800607","oldno":""},{"objectid1":17,"treeimage":"2015-7-16\/DSC_0372.JPG;2015-7-16\/DSC_0373.JPG;","sh":"3","abscisa":116.28974751,"pointx":116.28974751,"pointy":39.93585458,"ordinate":39.93585458,"subplace":"21世纪实验中学-外教楼北侧山坡","currState":"正常","treeno":"","townid":"八里庄","clafcation":"2","respunits":"21世纪中学","specie":"侧柏","treeid":"11010800608","oldno":""},{"objectid1":18,"treeimage":"2015-7-16\/DSC_0295.JPG;2015-7-16\/DSC_0296.JPG;2015-7-16\/DSC_0297.JPG;","sh":"3","abscisa":116.28967148,"pointx":116.28967148,"pointy":39.93551466,"ordinate":39.93551466,"subplace":"21世纪实验中学-篮球厂北侧山上","currState":"正常","treeno":"","townid":"八里庄","clafcation":"2","respunits":"21世纪中学","specie":"侧柏","treeid":"11010800609","oldno":""},{"objectid1":19,"treeimage":"2015-7-16\/DSC_0328.JPG;2015-7-16\/DSC_0329.JPG;2015-7-16\/DSC_0330.JPG;","sh":"3","abscisa":116.28982355,"pointx":116.28982355,"pointy":39.93598427,"ordinate":39.93598427,"subplace":"21世纪实验中学-外教楼北侧山坡","currState":"正常","treeno":"","townid":"八里庄","clafcation":"2","respunits":"21世纪中学","specie":"侧柏","treeid":"11010800611","oldno":""},{"objectid1":20,"treeimage":"2015-7-16\/DSC_0325.JPG;2015-7-16\/DSC_0326.JPG;2015-7-16\/DSC_0327.JPG;","sh":"3","abscisa":116.28971736,"pointx":116.28971736,"pointy":39.93595342,"ordinate":39.93595342,"subplace":"21世纪实验中学-外教楼北侧山坡","currState":"正常","treeno":"","townid":"八里庄","clafcation":"2","respunits":"21世纪中学","specie":"油松","treeid":"11010800612","oldno":""}],"total":"3771"}
-});

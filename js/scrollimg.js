@@ -1,6 +1,7 @@
 $(function (){
     var scrollImg=$(".change-box");
     scrollImg.siblings(".arrow-left").click(function (){//上一张
+		if(scrollImg.find("img").length<2) return false;
         var that=$(this);
         if(that.data("allow")=="not"){return false;}
         that.data("allow","not");
@@ -38,6 +39,7 @@ $(function (){
 
 
     }).siblings(".arrow-right").click(function (){//下一张
+		if(scrollImg.find("img").length<2) return false;
         var that=$(this);
         if(that.data("allow")=="not"){return false;}
         that.data("allow","not");
