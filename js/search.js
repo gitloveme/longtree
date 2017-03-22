@@ -115,118 +115,6 @@ function getBoundary(name){
         //map.setViewport(viewArry);
     });
 }
-/*添加树木*/
-//var treeLayer;
-//function addTreeTileLayer(){
-//    if(treeLayer) map.removeTileLayer(treeLayer);//先移除 
-//    treeLayer = new BMap.TileLayer({isTransparentPng: true});  // 创建地图层实例 
-//    treeLayer.getTilesUrl = function(tileCoord, zoom) {
-//        var PointConvert = new BaiduPointConvert(map);//百度坐标转换类  
-//        var lonlat_0 = PointConvert.tileToLngLat(tileCoord);//百度区块左下角经纬度  
-//        var tileCoord2 = new Object();  
-//        tileCoord2.x = x + 1;  
-//        tileCoord2.y = y + 1;  
-//        var lonlat2_0 = PointConvert.tileToLngLat(tileCoord2);//百度区块右下角经纬度  
-//        var lonlat_1=BD2GCJ(lonlat_0.lng, lonlat_0.lat);//百度转gcj  
-//        var lonlat2_1 = BD2GCJ(lonlat2_0.lng, lonlat2_0.lat);//百度转gcj  
-//        var lonlat = GCJ2WGS(lonlat_1.lng, lonlat_1.lat);//gcj转wgs  
-//        var lonlat2 = GCJ2WGS(lonlat2_1.lng, lonlat2_1.lat);//gcj转wgs  
-//        var worldCoordinate14 = lonLat2Mercator(lonlat);//转平面坐标  
-//        var worldCoordinate24 = lonLat2Mercator(lonlat2);//转平面坐标  
-//        var url= "*/MapServer/export?bbox=" + worldCoordinate14.x+ "%2C" + worldCoordinate14.y + "%2C"   
-//        + worldCoordinate24.x + "%2C" + worldCoordinate24.y  
-//        +"&bboxSR=102100&layers=&layerDefs=&size=256%2C256&imageSR=102100&format=png&transparent=true&dpi=&time=&layerTimeOptions=&dynamicLayers=&gdbVersion=&mapScale=&f=image";  
-//      return url;//图片 通过arcgis server返回，后期可以把图片下载下来后就抛弃server，然后以瓦片x，y，z命名  
-//
-//    };      
-//    map.addTileLayer(treeLayer);
-//}
-//function addOverlayTree(op){
-//    var option=$.extend({page_index:1,page_num:50},op);
-//    $.ajax({
-//        type:"get",
-//        url:"/inf/getLocation",
-//        data:option,
-//        dataType:"json",
-//        error:function (error){console.error("获取位置信息出错")},
-//        success:function (data){
-//            var baiduData=data.data;
-//            var sentString='';
-//            for(var i=0;i<baiduData.length;i++){
-//                if(i==baiduData.length-1){
-//                    sentString+=baiduData[i].X+","+baiduData[i].Y;
-//                }else{
-//                    sentString+=baiduData[i].X+","+baiduData[i].Y+";";
-//                }
-//                
-//            }
-//            $.ajax({
-//                type:"get",
-//                url:"http://api.map.baidu.com/geoconv/v1/",
-//                data:{coords:sentString,ak:"2lekLZRu8XcblvoAMksUK3qmGnISyCSP"},
-//                dataType:"jsonp",
-//                success:function (bddata){
-//                    if(bddata.status !=0) return false;
-//                    var arry=bddata.result;    
-//                    if(arry.length==0) return false;
-//                    var myIcon = new BMap.Icon("http://123.56.168.10/images/tree3.png", new BMap.Size(24,24));
-//                    for(var i=0;i<arry.length;i++){
-//                        var point = new BMap.Point(arry[i].x,arry[i].y);
-//                        var marker = new BMap.Marker(point,{icon:myIcon});
-//                        map.addOverlay(marker);
-//                        var NO=baiduData[i].NO || 0;
-//                        var sContent ='<div class="window" style="display:block;position:relative;"><div class="close-window">×</div>'+
-//                                '<img src="http://123.56.168.10/images/tree-des-1.jpg" class="treeimg" alt="油松">'+
-//                                '<div class="btn-more">'+
-//                                    '<em class="icon ico-eye"></em><a>查看详情</a>'+
-//                                '</div>'+
-//                                '<div class="icon ico-arrow" style="left:157px;"></div>'+
-//                                '<p class="treeno">NO.'+NO+'</p>'+
-//                                '<div class="treedes">'+
-//                                    '<h3>油松</h3>'+
-//                                    '<p class="des-en">Pinus tabuliformis Carrière</p>'+
-//                                    '<p class="des-cn"><em class="icon ico-ori"></em>沙河镇G6高速路以东运河沿岸</p>'+
-//                                '</div>'+
-//                            '</div>';
-//                        addClickHandler(sContent,marker);
-//                    }
-//                    function addClickHandler(content,marker){
-//                        marker.addEventListener("click",function(e){
-//                            openInfoWindow(content,e,this)}
-//                        );
-//                    }
-//                    function openInfoWindow(content,e,that){
-//                        var opts = {
-//                               // title  : "昌平园林绿化局",      //标题
-//                                width  : 390,//自动加了10像素             //宽度
-//                                height : 325,              //高度
-//                                panel  : "panel",         //检索结果面板
-//                                enableAutoPan : true,     //自动平移
-//                                enableSendToPhone:false,
-//                                searchTypes   :[
-//                                    /*BMAPLIB_TAB_SEARCH,   //周边检索
-//                                    BMAPLIB_TAB_TO_HERE,  //到这里去
-//                                    BMAPLIB_TAB_FROM_HERE //从这里出发*/
-//                                ]
-//                            }
-//                            var searchInfoWindow = new BMapLib.SearchInfoWindow(map,content,opts);  // 创建信息窗口对象
-//                            searchInfoWindow.open(that);
-//                            $(".close-window").unbind("click").click(function (){
-//                                searchInfoWindow.close(that);
-//                                $(this).parents(".window-detail").hide();
-//                            }).siblings(".btn-more").unbind("click").click(function (){
-//                                searchInfoWindow.close(that);
-//                                $(".window-detail").show();
-//                            });
-//                    }
-//                }
-//            })
-//
-//            
-//        }
-//    });    
-//    
-//}
 /*获取古树详细信息*/
 function lodeTreeDetail(nubmer){
 	$.ajax({
@@ -239,7 +127,6 @@ function lodeTreeDetail(nubmer){
 		},
 		success:function (data){
 			if(data.status==200){
-				/*{"X":"X坐标","Y":"Y坐标","NO":"古树编号","picture":"多个url用逗号分隔","county":"区县","quotation":"原挂牌号","feature_no":"特征代码","tree_seed":"树种"，"grade":"等级"，"estimation_age":"估测树龄","real_age":"真实树龄","higth":"树高","chest":"胸围","feature":"特点","growth_vigor":"生长势","growth_enviro":"生长环境","town":"乡镇","villiage":"村","small_place":"小地名","product_place":"生长场所","exist_state":"现存状态","survey_no":"调查号","altitude":"海拔","aver_crown":"平均冠幅","east_crown":"东西冠幅","south_crown":"南北冠幅","manage_com":"管护单位","manage_people":"管护人"，*/
 				var obj=data.data;
 				var images=obj.picture.split(",");
 				var windowDom=$(".window-detail");
@@ -327,20 +214,6 @@ function loadSearchData(op){
         dataType:"json",
         error:function (error){console.error("获取信息出错")},
         success:function (data){
-			/*data={"status":"","error":"",
-				  "data":[{
-						"X":"X坐标",
-						"Y":"Y坐标",
-						"NO":"古树编号",
-						"quotation":"原挂牌号",
-						"survey_no":"调查号",
-						"tree_seed":"树种",
-						"town":"乡镇",
-						"small_place":"小地名"
-						"create_time":"录入时间",
-						"state":"审核状态"
-						}]
-				 }*/
 
 			if(data && data.status == 200){
                 var arry=data.data || [];
@@ -353,9 +226,9 @@ function loadSearchData(op){
                     var lng=arry[i].X || 0;
                     var lat=arry[i].Y || 0;
                     table+='<tr lng="'+lng+'" lat="'+lat+'" postnum="'+postNum+'" type="'+treeName+'" address="'+treeAdress+'">'+
-                               '<td style="width:12em;">'+NO+'</td>'+
+                               '<td>'+NO+'</td>'+
                                '<td>'+treeAdress+'</td>'+
-                               '<td style="width:8em;">'+treeName+'</td>'
+                               '<td>'+treeName+'</td>'
                             '</tr>';
 					
 					////////
@@ -466,6 +339,9 @@ function loadSearchData(op){
 						//$(".window-detail").show();
 					});
 				});
+                searchList.find(".autoscroll").find("tr").eq(0).find("td").each(function (i,ele){
+                        searchList.find(".copytable").find("th").eq(i).width($(ele).width());
+                     }); 
 				function addClickHandler(content,marker){
 					marker.addEventListener("click",function(e){
 						openInfoWindow(content,e,this)}
