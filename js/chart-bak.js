@@ -1,623 +1,259 @@
-
-    
- /***
-  *构建饼状图图表
-  * @param div
-  * @param title
-  * @param data
-  * @param func
-  * @param key
-  * @return
-  */
-	//饼图填充色库hegw
-	//var colorsLibrary=["#FF0000","#FFFF33","#3300FF","#00FF33","#CC00FF","#CC9900","#CCFFFF","#CCCC00","#FF3333","#0033FF"];
-	var colorsLibrary=["#79b2c5","#30629f","#a5322f","#769538","#725399","#319db9","#ed8127","#8aa6d5","#d78788","#b9d290"];
-    function buildPieChart(div,title,data){
-    	var _chartData=null;
-    	if(data!=null){
-    		_chartData=new Array();
-    		var a1=data.split("|");
-    		var j=0;
-    		for(var i=0;i<a1.length;i++){
-    			var b1=a1[i].split(':');
-		    	var itemDatahgw=new Object();
-		    	itemDatahgw.name=b1[0];
-    		    itemDatahgw.y=Number(b1[1]);
-    		    itemDatahgw.color=colorsLibrary[j];
-    			j++;
-    			if(j>colorsLibrary.length){j=0;}
-    			_chartData.push(itemDatahgw);
-    		}
-    	}
-    	
-    	var chart = new Highcharts.Chart({
-            chart: {
-                renderTo: div,  
-                width:900,
-                height:280,
-                plotBackgroundColor: null,
-                plotBorderWidth: null,
-                plotShadow: false
-            },
-            //设置图例位置、大小hegw
-            legend: {
-	            align: 'right',
-	            verticalAlign: 'top',
-	            x: 0,
-	            y: 1,
-	            width: 100,
-	            itemWidth:100
-	        },
-	        
-            title: {
-                text: '<b>'+title+'</b>',
-                style:{
-                	fontSize: '18px',
-                    fontFamily: '黑体'
-                }
-            },
-            tooltip: {
-                formatter: function() {
-                    return '<b>'+this.point.name +'</b>: '+ this.y +","+ Highcharts.numberFormat(this.percentage,1)+' %';//鼠标经过提示
-                }
-            },
-            plotOptions: {
-                pie: {
-                    allowPointSelect: true,
-                    cursor: 'pointer',
-                    dataLabels: {
-                        enabled: true,
-                        color: '#000000',
-                        connectorColor: '#000000',
-                        formatter: function() {
-                            return '<b>'+this.point.name +'</b>: '+ this.y ;//+' ,'+ Highcharts.numberFormat(this.percentage,1)+' %';//周边提示this.percentage
-                        }
-                    },
-                    //显示图例hegw true/false
-                    showInLegend: false,
-                    
-					events:{
-						//单击事件
-						click: function(e) {
-							
-						}
-					}
-                }
-            },
-            series: [{
-                type: 'pie',
-                data: _chartData
-            }]
-        });
-    }
-    /*
-     * 构建柱状图
-     * @param {Object} div
-     * @param {Object} title
-     * @param {Object} data
-     * @memberOf {TypeName} 
-     * @return {TypeName} 
-     */
-    function buildBarChart(div,title,data){
-    	var _chartData=null;
-    	var xText=null;
-    	if(data!=null){
-    		_chartData=new Array();
-    		xText=new Array();
-    		var a1=data.split("|");
-    		var j=0;
-    		for(var i=0;i<a1.length;i++){
-    			var b1=a1[i].split(':');
-    			xText.push(b1[0]);
-		    	//自定义饼图颜色，由原来的[name,value],形式，改成{name: 'Chrome',y: 12.8,color: '#FF0000'},形式hegw
-		    	var itemDatahgw=new Object();
-		    	itemDatahgw.name=b1[0];
-    		    itemDatahgw.y=Number(b1[1]);
-    		    itemDatahgw.color=colorsLibrary[j];
-    			j++;
-    			if(j>colorsLibrary.length){j=0;}
-    			_chartData.push(itemDatahgw);
-    		}
-    	}
-    	
-        var chart = new Highcharts.Chart({ 
-            chart: { 
-                renderTo: div, //图表放置的容器，关联DIV#id  
-                width:900,
-                height:280,
-                zoomType: 'xy'   //X、Y轴均可放大 
-            }, 
-            title: { 
-                text: '<b>'+title+'</b>',
-                style:{
-                	fontSize: '18px',
-                    fontFamily: '黑体'
-                } //图表标题 
-            }, 
-            xAxis: { //X轴标签 
-                categories: xText,//['2010年3月', '2010年4月', '2010年5月', '2010年6月', '2010年7月'], 
-                labels: {
-                    rotation: -45,
-                    align: 'right',
-                    style: {
-                        fontSize: '12px',
-                        fontFamily: '宋体'
+$(function (){
+    // 路径配置
+    require.config({
+        paths: {
+            echarts: 'http://echarts.baidu.com/build/dist'
+        }
+    });
+    require(
+        [
+            'echarts',
+            'echarts/chart/pie',
+            'echarts/chart/bar',
+            'echarts/chart/line'
+        ],
+        function (ec) {
+            //var myChart = ec.init(document.getElementById('tjmap'));
+            var barOption={
+                tooltip : {
+                    trigger: 'axis',
+                    formatter: "{b}<br/>{a}: {c}棵"
+                },
+                xAxis : [
+                    {
+                        name:"行政区域",
+                        nameTextStyle:{"fontSize":"14","color":"#808080"},
+                        data : ['城北街道','城南街道','南口','沙河','南邵','崔村','阳坊','流村','马池口','十三陵','长陵','北七家'],                        
+                        axisLabel:{
+                            textStyle: {
+                                color: '#808080'
+                            }
+                        },
+                        axisLine:{
+                            lineStyle:{
+                                color: '#969696',
+                                width: 1,
+                                type: 'solid'
+                            }  
+                        },
+                        axisTick:{show:false}
                     }
-                }
-            }, 
-            yAxis:{ //设置Y轴-第二个（金额） 
-                //gridLineWidth: 1,  //设置网格宽度为0，因为第一个Y轴默认了网格宽度为1 
-            	min: 0,
-                title: {text: ''},//Y轴标题设为空 
-                allowDecimals:false,//不显示小数属性
-                labels: { 
-                    formatter: function() {//格式化标签名称 
-                        return this.value; 
-                    }, 
-                    style: { 
-                        color: '#4572A7' //设置标签颜色 ,蓝色：#4572A7；
-                    } 
-                } 
-                
-            }, 
-            plotOptions: { 
-				series: { 
-					cursor: 'pointer', 
-					events: { 
-						click: function(e) { //就是这里的事件响应不了。而且我不太会调试，希望得到大家指点！ 
-							//var a =e.point.x;
-							//func(xText[a]);
-						} 
-					} 
-				},column: {
-                    pointPadding: 0.2,
-                    borderWidth: 0,
-                    pointWidth: 15
-                }  
-            }, 
+                ],
+                yAxis : [
+                    {
+                        name : '树木(棵)',
+                        nameTextStyle:{"fontSize":"14","color":"#808080"},
+                        axisLabel:{
+                            textStyle: {
+                                color: '#808080'
+                            }
+                        },
+                        axisLine:{
+                            lineStyle:{
+                                color: '#969696',
+                                width: 1,
+                                type: 'solid'
+                            }  
+                        }
+                    }
+                ],
+                series : [
+                    {
+                        name:'树木总数',
+                        type:'bar',
+                        barWidth:20, 
+                        itemStyle: { 
+                            normal: {
+                                color: function(params) {
+                                    var colorList = ['#91a86f','#7fa86f','#6fa870','#6fa88d','#6fa8a6','#7c9fb2','#8699b9','#a0a2c8','#b9a0c8','#ca9dba','#d4a9ac','#d5c096','#c5cc8c','#9ebc80','#c23531','#2f4554', '#61a0a8', '#d48265', '#91c7ae','#749f83','#ca8622', '#bda29a','#6e7074', '#546570', '#c4ccd3'];
+                                    return colorList[params.dataIndex]
+                                },
 
-            tooltip: { //鼠标滑向数据区显示的提示框 
-                formatter: function() {  //格式化提示框信息 
-                    return '' + this.x + ': ' + this.y+''; 
-                } 
-            }, 
+                                label : {
+                                    show: true, 
+                                    position: 'top',
+                                    textStyle: {
+                                        color: '#808080'
+                                    }
+                                }
+                            }
+                        },
+                        data:[20,100,123,400,90,70,230,600,500,400,200,300,445]
+                    }
+                ]
+
+            };
+            var lineOption={
+                tooltip : {
+                    trigger: 'axis',
+                    formatter: "{b}<br/>{a}: {c}棵"
+                },
+                xAxis : [
+                    {   
+                        name:"行政区域",
+                        nameTextStyle:{"fontSize":"14","color":"#808080"},
+                        type : 'category',
+                        boundaryGap : false,
+                        data : ['城北街道','城南街道','南口','沙河','南邵','崔村','阳坊','流村','马池口','十三陵','长陵','北七家'],
+                        axisLabel:{
+                            textStyle: {
+                                color: '#808080'
+                            }
+                        },
+                        axisLine:{
+                            lineStyle:{
+                                color: '#969696',
+                                width: 1,
+                                type: 'solid'
+                            }  
+                        },
+                        axisTick:{show:false}
+                    }
+                ],
+                yAxis : [
+                    {   
+                        name : '树木(棵)',
+                        nameTextStyle:{"fontSize":"14","color":"#808080"},
+                        type : 'value',
+                        axisLine:{
+                            lineStyle:{
+                                color: '#969696',
+                                width: 1,
+                                type: 'solid'
+                            }  
+                        }
+                        
+                    }
+                ],
+                series : [
+                    {
+                        name:'树木总数',
+                        type:'line',
+                        itemStyle: {
+                            normal: {
+                                color:"#547543",
+                                lineStyle: {
+                                    shadowColor : 'rgba(0,0,0,0.4)'
+                                }
+                            }
+                        },
+                        data:[20,100,123,400,90,70,230,600,500,400,200,300,445]
+                    }
+                ]
+            };
+            var pieOption = {
+                tooltip : {
+                    trigger: 'item',
+                    formatter: "{b}<br/>{a}: {c}棵"
+                },
+                series : [
+                    {
+                        name:'树木总数',
+                        type:'pie',
+                        radius : '55%',
+                        center: ['50%', '50%'],
+                        selectedOffset:20,
+                        data:[
+                        //['城北街道','','','','','','','','','','','']
+                        //[20,100,123,400,90,70,230,600,500,400,200,300,445]
+                            {value:20, name:'城北街道'},
+                            {value:100, name:'城南街道'},
+                            {value:123, name:'南口'},
+                            {value:400, name:'沙河'},
+                            {value:90, name:'南邵'},
+                            {value:70, name:'崔村'},
+                            {value:230, name:'阳坊'},
+                            {value:600, name:'流村'},
+                            {value:500, name:'马池口'},
+                            {value:400, name:'十三陵'},
+                            {value:200, name:'长陵'},
+                            {value:300, name:'北七家'}
+                        ]
+                    }
+                ]
+            };
+            var bdStyle;
+            var loadDom;
+            var comBox=$(".commonbox");
+            comBox.find(".tj-map-type").find("li").click(function (){
+                if($(this).hasClass("active")) return false;
+                $(this).addClass("active").siblings().removeClass("active");
+                loadChart(loadDom);
+            });
             
-            series: [{  //数据列 
-                name: '数量', 
-                color: '#4572A7', //蓝色：4572A7
-                type: 'column', //类型：纵向柱状图 
-                yAxis: 0, //数据列关联到Y轴，默认是0，设置为1表示关联上述第二个Y轴即金额 
-                data: _chartData//[59.95, 55.55, 57.7, 81.15, 58.87] //金额数据 
-                ,
-                dataLabels: {
-                    enabled: true,
-                    rotation: 0,
-                    color: '#000000',
-                    align: 'center',
-                    x: 0,
-                    y: -2,
-                    style: {
-                        fontSize: '13px',
-                        fontFamily: 'Verdana, sans-serif'
-                    }
-                }
-            }] 
-        }); 
-    }
-    /**
-     * 折线图
-     * @param {Object} div
-     * @param {Object} title
-     * @param {Object} data
-     * @memberOf {TypeName} 
-     * @return {TypeName} 
-     */
-     function buildLineChart(div,title,data){
-    	 var xText=null;
-    	 var xData=null;
-    	if(data!=null){
-    		var a1=data.split("|");
-    		xText=new Array();
-    		xData=new Array();
-    		for(var i=0;i<a1.length;i++){
-    			var b1=a1[i].split(':');
-    			xText.push(b1[0]);
-    			xData.push(Number(b1[1]));
-    	    	continue;
-    		}
-    	}
-    	 var chart = new Highcharts.Chart({
-            chart: {
-                renderTo: div, 
-                width:900,
-                height:280,
-                zoomType: 'xy'   //X、Y轴均可放大 
-            },
-            title: {
-                text: '<b>'+title+'</b>',
-                x: -20,//center
-                style:{
-                	fontSize: '18px',
-                    fontFamily: '黑体'
-                } 
-            },
-            xAxis: {
-                categories: xText,
-                labels: {
-                    rotation: -45,
-                    align: 'right',
-                    style: {
-                        fontSize: '12px',
-                        fontFamily: '宋体'
-                    }
-                }
-            },
-            yAxis: {
-            	min: 0,
-                title: {
-                    text: ''//Y轴标题
+            var typename=localStorage.getItem("chartType") || getQueryString("type") || "gsdj"; 
+            var typeObject={
+                "gsdj":{
+                    "setClass":"tj-tit-gsdj",
+                    "setTitle":"古树等级分布情况",
+                    "setIndex":0,
+                    "preName":"qyfb",
+                    "nextName":"gszs"
                 },
-                allowDecimals:false,//不显示小数属性
-                plotLines: [{
-                    value: 0,
-                    width: 1,
-                    color: '#808080'//#808080
-                }]
-            },
-            tooltip: {
-                formatter: function() {
-                        return this.x +': '+ this.y ;
-                }
-            },
-            legend: {
-                layout: 'vertical',
-                align: 'right',
-                verticalAlign: 'top',
-                x: -10,
-                y: 100,
-                borderWidth: 0
-            },
-            series: [{
-                name: '数量',
-                yAxis: 0, //数据列关联到Y轴，默认是0，设置为1表示关联上述第二个Y轴即金额 
-                data: xData
-            }]
-        });
-     }
-      function buildBarsChart(div,tableId,data){
-    	if(data!=null){
-    		document.getElementById(tableId).innerText="";
-    		var cf=data.split(";;");
-    		var itemData;
-    		var xText=new Array();
-    		var xData=new Array();
-    		var xText1=cf[0].split(",");
-    		var Html="<table id='datatable' >"+
-    			"<thead>"+
-    			"<tr>"+
-    			"<th></th>";
-    		//一系列的标签
-    		for(var i=0;i<xText1.length;i++){
-    			Html+="<th>"+xText1[i]+"</th>";
-    			xText.push(xText1[i]);
-    		}
-    		Html+="</tr>"+
-    			"</thead>"+
-    			"<tbody>";
-    		//alert(cf[1]);
-    		var xText2=cf[1].split(",");//标签上的分组
-    		for(var j=0;j<xText2.length;j++){
-    			Html+="<tr>"+
-    				"<th>"+xText2[j]+"</th>";
-    				var d=j+2;
-    				if(d<cf.length){
-    					var theDate=cf[d].split(",");
-		    			for(var f=0;f<theDate.length;f++){
-		    				Html+="<td>"+theDate[f]+"</td>";
-		    			}
-    				}
-	    			
-    	    	Html+="</tr>";
-    		}
-    		Html+="</tbody>"+
-    		"</table>";
-    		$("#"+tableId).append(Html); 
-    	}
-    	Highcharts.visualize = function(table, options) {
-            // the categories
-            options.xAxis.categories = [];
-            $('tbody th', table).each( function(i) {
-                options.xAxis.categories.push(this.innerHTML);
-            });
-    
-            // the data series
-            options.series = [];
-            $('tr', table).each( function(i) {
-                var tr = this;
-                $('th, td', tr).each( function(j) {
-                    if (j > 0) { // skip first column
-                        if (i == 0) { // get the name and init the series
-                            options.series[j - 1] = {
-                                name: this.innerHTML,
-                                data: [],
-                                dataLabels: {
-				                    enabled: true,
-				                    rotation: 0,
-				                    color: '#000000',
-				                    align: 'center',
-				                    x: 0,
-				                    y: -2,
-				                    style: {
-				                        fontSize: '13px',
-				                        fontFamily: 'Verdana, sans-serif'
-				                    }
-				                }
-                            };
-                        } else { // add values
-                            options.series[j - 1].data.push(parseFloat(this.innerHTML));
-                        }
-                    }
-                });
-            });
-    
-            var chart = new Highcharts.Chart(options);
-        }
-    
-        var table = document.getElementById("datatable"),
-        options = {
-            chart: {
-                renderTo: div,
-                type: 'column'
-            },
-            title: {
-                text: ''
-            },
-            xAxis: {
-            	labels: { 
-                    rotation: 0,  //逆时针旋转45°，标签名称太长。 
-                    align: 'center' , //设置right右对齐 
-                    y:20
-                } 
-            },
-            yAxis: {
-                title: {
-                    text: ''
+                "gszs":{
+                    "setClass":"tj-tit-gszs",
+                    "setTitle":"古树长势分布情况",
+                    "setIndex":1,
+                    "preName":"gsdj",
+                    "nextName":"szbl"
                 },
-                allowDecimals:false//不显示小数属性
-            },
-            tooltip: {
-                formatter: function() {
-                    return '<b>'+ this.series.name +'</b><br/>'+
-                        this.x.toLowerCase()+' '+ this.y ;
+                "szbl":{
+                    "setClass":"tj-tit-szbl",
+                    "setTitle":"树种比例分布情况",
+                    "setIndex":2,
+                    "preName":"gszs",
+                    "nextName":"qyfb"
+                },
+                "qyfb":{
+                    "setClass":"tj-tit-qyfb",
+                    "setTitle":"各行政区域古树分布情况",
+                    "setIndex":3,
+                    "preName":"szbl",
+                    "nextName":"gsdj"
                 }
+            };
+            comBox.find(".tj-arrow").find("div").click(function (){
+                var name=$(this).attr("name");
+                localStorage.setItem("chartType",name);
+                setTongjiData(typeObject[name]);
+            });
+            function setTongjiData(obj){
+                var setClass=obj.setClass;
+                var setTitle=obj.setTitle;
+                var setIndex=obj.setIndex;
+                if(setIndex==0){
+                    comBox.find(".arrow-left").hide();
+                }else if(setIndex==3){
+                    comBox.find(".arrow-right").hide();
+                }else{
+                    comBox.find(".arrow-left,.arrow-right").show();
+                }
+                comBox.find(".tj-tit-img").attr("class","tj-tit-img "+setClass);
+                comBox.find(".tj-tit").html(setTitle);
+                comBox.find(".showimgs").stop().animate({
+                    "marginLeft":-setIndex*comBox.find(".allmapimgs").width()
+                },1000);
+                comBox.find(".arrow-left").attr("name",obj.preName).siblings(".arrow-right").attr("name",obj.nextName);
+                loadDom=comBox.find(".mapimage")[setIndex];
+
+                loadChart(loadDom);
             }
-        };
-    
-        Highcharts.visualize(table, options);
-    	
-    }
-      
-function yObj(){
-	this.name;
-	this.data;
-}
-/**
- * 多线
- * @param {Object} div
- * @param {Object} title
- * @param {Object} data
- * @memberOf {TypeName} 
- * @return {TypeName} 
- */
- function buildLinesChart(div,title,data){
-    	var dateArray=new Array();
-    	if(data!=null){
-    		var allD=data.split(";;");
-    		var xTD=allD[0].split(',');
-    		var xText=new Array();//x轴标签
-    		for(var i=0;i<xTD.length;i++){
-    			xText.push(xTD[i]);//x轴标签
-    		}
-    		var yTD=allD[1].split(',');
-    		for(var j=0;j<yTD.length;j++){
-    			var dataObj= new yObj();
-    			dataObj.name=yTD[j];//数据name
-    			var yD=allD[j+2].split(',');
-    			var isData= new Array();
-    			for(var k=0;k<yD.length;k++){
-    				isData.push(parseInt(yD[k]));
-    			}
-    			dataObj.data=isData;//数据data
-    			dateArray.push(dataObj);
-    		}
-    		
-    	}else{
-    		return;
-    	}
-    	 chart = new Highcharts.Chart({
-            chart: {
-                renderTo: div,
-                type: 'line',
-                marginRight: 130,
-                marginBottom: 25
-            },
-            title: {
-                text: title,
-                x: -20 //center
-            },
-            subtitle: {
-                text: '',
-                x: -20
-            },
-            xAxis: {
-            	categories: xText, //['管理员', '地方', '个人', '行政']
-            	labels: { 
-                    rotation: 0,  //逆时针旋转45°，标签名称太长。 
-                    align: 'center' , //设置right右对齐 
-                    y:20
-                } 
-            },
-            yAxis: {
-                title: {
-                    text: ''
-                },
+            var myChart;
+            function loadChart(dom){
+                myChart = require('echarts').init(dom);
+                var i=comBox.find(".tj-map-type").find(".active").index();
+                bdStyle={
+                    "pie":pieOption,
+                    "line":lineOption,
+                    "bar":barOption
+                }
+                var typeArry=["pie","line","bar"];
+                var option=bdStyle[typeArry[i]] || barOption;
+                myChart.dispose;//销毁
+                myChart.setOption(option);
                 
-                allowDecimals:false,//不显示小数属性
-                plotLines: [{
-                    value: 0,
-                    width: 1,
-                    color: '#808080'
-                }]
-            },
-            tooltip: {
-                formatter: function() {
-                        return '<b>'+ this.series.name +'</b><br/>'+
-                        this.x +': '+ this.y +'';
-                }
-            },
-            legend: {
-                layout: 'vertical',
-                align: 'right',
-                verticalAlign: 'top',
-                x: -10,
-                y: 100,
-                borderWidth: 0
-            },
-            series: dateArray
-        });
-     }
- function yData(){
-	this.y;
-	this.color;	
-	this.drilldown;
-}
-function yText(){
-	this.name;
-	this.categories	;
-	this.data;
-	this.color;
-}
-/**
- * 多饼
- * @param {Object} div
- * @param {Object} title
- * @param {Object} data
- * @memberOf {TypeName} 
- * @return {TypeName} 
- */
-  function buildPiesChart(div,title,data){
-	  var colors = Highcharts.getOptions().colors;
-	  if(data!=null){
-		  
-		  	var allD=data.split(";;");
-    		
-			var xTD=allD[0].split(',');
-			var xText=new Array();//外圈标签
-			for(var i=0;i<xTD.length;i++){
-				xText.push(xTD[i]);//外圈标签
-			}
-			
-			var categoriesTD=allD[1].split(',');
-			var categoriesT=new Array();//内圈标签
-			for(var j=0;j<categoriesTD.length;j++){
-				categoriesT.push(categoriesTD[j]);//内圈标签
-			}
-			
-			var dataArray=new Array();//整体数据
-			for(var k=2;k<allD.length;k++){
-				var dataObj=new yData();
-				var isData=0;
-				
-				dataObj.color=colors[k];
-				var valS=allD[k].split(',');
-				var drilldownArray= new yText();
-				var val=new Array();
-				for(var f=0;f<valS.length;f++){
-					val.push(parseInt(valS[f]));
-					isData+=parseInt(valS[f]);
-				}
-				dataObj.y=isData;
-				drilldownArray.name=categoriesT[k-2];
-				drilldownArray.categories=xText;
-				drilldownArray.data=val;
-				drilldownArray.color=colors[k];
-				dataObj.drilldown=drilldownArray;
-				dataArray.push(dataObj);
-			}
-	  }else{
-		  return;
-	  }
-	  categories = categoriesT,//内圈标签
-            name = '',
-            data =dataArray;
-    
-    
-        // Build the data arrays
-        var browserData = [];
-        var versionsData = [];
-        for (var i = 0; i < data.length; i++) {
-    
-            // add browser data
-            browserData.push({
-                name: categories[i],
-                y: data[i].y,
-                color: data[i].color
-            });
-    
-            // add version data
-            for (var j = 0; j < data[i].drilldown.data.length; j++) {
-                var brightness = 0.2 - (j / data[i].drilldown.data.length) / 5 ;
-                versionsData.push({
-                    name: data[i].drilldown.categories[j],
-                    y: data[i].drilldown.data[j],
-                    color: Highcharts.Color(data[i].color).brighten(brightness).get()
-                });
             }
+            setTongjiData(typeObject[typename]);
         }
-    
-        // Create the chart
-        chart = new Highcharts.Chart({
-            chart: {
-                renderTo: div,
-                type: 'pie'
-            },
-            title: {
-                text: ''
-            },
-            yAxis: {
-                title: {
-                    text: ''
-                }
-            },
-            plotOptions: {
-                pie: {
-                    shadow: false
-                }
-            },
-            tooltip: {
-        	    valueSuffix: ''
-            },
-            series: [{
-                name: '&nbsp;',
-                data: browserData,
-                size: '60%',
-                dataLabels: {
-                    formatter: function() {
-                        return this.y > 5 ? this.point.name : null;
-                    },
-                    color: 'white',
-                    distance: -30
-                }
-            }, {
-                name: '&nbsp;',
-                data: versionsData,
-                innerSize: '60%',
-                dataLabels: {
-                    formatter: function() {
-                        // display only if larger than 1
-                        return this.y > 1 ? '<b>'+ this.point.name +':</b> '+ this.y +''  : null;
-                    }
-                }
-            }]
-        });
-  }
+    );
+});
