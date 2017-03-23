@@ -73,11 +73,18 @@ body{background-color:#547543;font-family:Microsoft YaHei;color:#fff; overflow: 
 */
 .search-list table{ width:100%;text-align: left;color:#808080;font-size:14px;}
 .search-list tr{line-height: 38px;}
+/*
 .search-list td:first-child,.search-list td:last-child,.search-list th:first-child,.search-list th:last-child{padding:0 3%;}
+*/
 .search-list th{background-color:#d3e8d5;color:#5d7e60;font-weight:normal;}
 .search-list tr:nth-child(even){background-color:#fefefe;}
 .search-list tr:nth-child(odd){background-color:#eef5ef;}
 .search-list tr.active,.search-list tr:hover{color:#75af69;}
+.search-list .choose{width:40px;padding:0;}
+
+.autoscroll tr:hover .choose{background:url(../images/choose0.png) no-repeat 9px 9px;}
+.autoscroll .active .choose,.autoscroll tr.active:hover .choose{background:url(../images/choose.png) no-repeat 9px 9px;}
+
 .arrow-s{width:16px;height:16px;display: inline-block;vertical-align: middle;background-position:-263px -190px;}
 .window{position:absolute;width:400px;height:310px; background-color:#537343;z-index:9;display: none;}
 .treeimg{width:100%;height:265px;}

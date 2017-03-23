@@ -24,7 +24,7 @@ $(function (){
                         /*
                         古树编号 ；古树树种 ；古树街道 ；修复内容 ；复壮人 ；复壮时间 
                          */
-                        tableTh='<tr><th>编号<em class="icon arrow-s"></em></th><th>树种</th><th>地点</th><th>修复内容</th><th>复壮人</th><th>复壮时间</th></tr>' ;
+                        tableTh='<tr><th class="choose"></th><th>编号<em class="icon arrow-s"></em></th><th>树种</th><th>地点</th><th>修复内容</th><th>复壮人</th><th>复壮时间</th></tr>' ;
                         
                         for(var i=0;i<arry.length;i++){
                             var coordx=arry[i].X || 0;
@@ -35,14 +35,14 @@ $(function (){
                             var treeRepair=arry[i].repair || "-";
                             var treeWorker=arry[i].header || "-";
                             var treeRepairTime=arry[i].analepsis_time || "-";
-                            treelist+='<tr coord="'+coordx+','+coordy+'" no="'+treeNo+'"><td>'+treeNo+'</td><td>'+treeKind+'</td><td>'+treeStreet+'</td><td>'+treeRepair+'</td><td>'+treeWorker+'</td><td>'+treeRepairTime+'</td></tr>';
+                            treelist+='<tr coord="'+coordx+','+coordy+'" treeno="'+treeNo+'"><td class="choose"></td><td>'+treeNo+'</td><td>'+treeKind+'</td><td>'+treeStreet+'</td><td>'+treeRepair+'</td><td>'+treeWorker+'</td><td>'+treeRepairTime+'</td></tr>';
                         }
                      }
                      else if(loadType==2){//古树养护
                         /*
                         古树名木编号 ；树种 ;地点 ;养护季节 ;养护单位 ;养护时间 
                          */
-                        tableTh='<tr><th>编号<em class="icon arrow-s"></em></th><th>树种</th><th>地点</th><th>养护季节</th><th>养护单位</th><th>养护时间</th></tr>' ;
+                        tableTh='<tr><th class="choose"></th><th>编号<em class="icon arrow-s"></em></th><th>树种</th><th>地点</th><th>养护季节</th><th>养护单位</th><th>养护时间</th></tr>' ;
                         
                         for(var i=0;i<arry.length;i++){
                             var coordx=arry[i].X || 0;
@@ -53,7 +53,7 @@ $(function (){
                             var treeSeason=arry[i].maintain_season || "-";
                             var treeWorker=arry[i].maintain_corporation || "-";
                             var treeRepairTime=arry[i].analepsis_time || "-";
-                            treelist+='<tr coord="'+coordx+','+coordy+'" no="'+treeNo+'"><td>'+treeNo+'</td><td>'+treeKind+'</td><td>'+treeStreet+'</td><td>'+treeSeason+'</td><td>'+treeWorker+'</td><td>'+treeRepairTime+'</td></tr>';
+                            treelist+='<tr coord="'+coordx+','+coordy+'" treeno="'+treeNo+'"><td class="choose"></td><td>'+treeNo+'</td><td>'+treeKind+'</td><td>'+treeStreet+'</td><td>'+treeSeason+'</td><td>'+treeWorker+'</td><td>'+treeRepairTime+'</td></tr>';
                         }
                         
                      }
@@ -61,7 +61,7 @@ $(function (){
                         /*
                         编号  树种  地点  复壮措施    异常情况描述  应对措施    落实情况    树体状况    巡查时间
                          */
-                        tableTh='<tr><th>编号<em class="icon arrow-s"></em></th><th>树种</th><th>地点</th><th>复壮措施</th><th>异常情况描述</th><th>应对措施</th><th>落实情况</th><th>树体状况</th><th>巡查时间</th></tr>' ;
+                        tableTh='<tr><th class="choose"></th><th>编号<em class="icon arrow-s"></em></th><th>树种</th><th>地点</th><th>复壮措施</th><th>异常情况描述</th><th>应对措施</th><th>落实情况</th><th>树体状况</th><th>巡查时间</th></tr>' ;
                         
                         for(var i=0;i<arry.length;i++){
                             var coordx=arry[i].X || 0;
@@ -76,7 +76,7 @@ $(function (){
                             var treeIng=arry[i].practicable_desc || "-";
                             var treeSituation=arry[i].tree_desc || "-";
                             var treeRepairTime=arry[i].around_time || "-";
-                            treelist+='<tr coord="'+coordx+','+coordy+'" no="'+treeNo+'"><td>'+treeNo+'</td><td>'+treeKind+'</td><td>'+treeStreet+'</td><td>'+treeMeasure+'</td><td>'+treeDes+'</td><td>'+treeHelp+'</td><td>'+treeIng+'</td><td>'+treeSituation+'</td><td>'+treeRepairTime+'</td></tr>';
+                            treelist+='<tr coord="'+coordx+','+coordy+'" treeno="'+treeNo+'"><td class="choose"></td><td>'+treeNo+'</td><td>'+treeKind+'</td><td>'+treeStreet+'</td><td>'+treeMeasure+'</td><td>'+treeDes+'</td><td>'+treeHelp+'</td><td>'+treeIng+'</td><td>'+treeSituation+'</td><td>'+treeRepairTime+'</td></tr>';
                         }
 
                      }
@@ -116,7 +116,7 @@ $(function (){
         }
     });
     $(".manage-btn-edit").click(function (){
-		var treeNo=$(".autoscroll").find(".active").attr("no");
+		var treeNo=$(".autoscroll").find(".active").attr("treeno");
 		if(treeNo==null){
 			dialogMessage("编辑","请先选中下方一条数据再进行操作");
 			return false;

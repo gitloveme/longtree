@@ -42,13 +42,14 @@
 			</div>
 			<div class="search-list manage-pub-search">
 				<div class="copytable">
-					<table>
+					<!--<table>
 						<tr>
+							<th class="choose"></th>
 							<th>编号<em class="icon arrow-s"></em></th>
 							<th>地区</th>
 							<th>树种</th>
 						</tr>
-					</table>
+					</table>-->
 				</div>
 				</div>
 				<div class="autoscroll">
@@ -194,6 +195,8 @@
 <script type="text/javascript">
 $(function (){
 	var searchList=$(".search-list");
+	var writeDomAdd=$(".dialogwrite").eq(0);
+	var writeDomMap=$(".dialogwrite").eq(1);
 	var sentImgUrl='';
 	document.getElementById("uploadimg").onchange=function (event){
 		var files=event.target.files;
@@ -233,14 +236,43 @@ $(function (){
 		reader.readAsDataURL(image);
 	}
 	$(".uploadlist").delegate(".delimg","click",function (){
+		var href=","+$(this).attr("src");
+		var index=sentImgUrl.indexOf(href);
+		if(index!=-1){
+			sentImgUrl=sentImgUrl.substring(0,index)+sentImgUrl.substr(index+href.length);
+		}
 		$(this).parent().remove();
 	});
 	$(".write-close").click(function (){
 		$(this).parents(".dialogwrite").hide();
 	});
+	/*古树操作*/
 	$(".manage-btn-add").click(function (){
-		$(".dialogwrite").eq(0).show();
+		sentImgUrl='';
+		writeDomAdd.find(".btns-submit").attr("type","add").html("添加古树");
+		writeDomAdd.find("input[type='text']").each(function (){
+			$(this).val("");
+		});
+		writeDomAdd.show().find("select").each(function (){
+			$(this).val("");
+		});
+	}).siblings(".manage-btn-edit").click(function (){
+		if(searchList.find(".autoscroll").find(".active").length==0){
+			dialogMessage("编辑古树信息","请您先选中一条古树记录后再进行编辑！");
+			return false;
+		}
+		var number=searchList.find(".autoscroll").find(".active").attr("treeno");
+		lodeTreeDetail(number);
+	}).siblings(".manage-btn-del").click(function (){
+		var delDom=searchList.find(".autoscroll").find(".active");
+		if(delDom.length==0){
+			dialogMessage("删除古树信息","请您先选中一条古树记录后再进行删除！");
+			return false;
+		}
+		var number=delDom.attr("treeno");
+		delTreeDetail(number,delDom);
 	});
+	/*加载新增古树列表*/
 	function loadNewTree(op){
 		var option=$.extend({page_index:1,page_num:20,type:1},op);
 		$.ajax({
@@ -254,13 +286,14 @@ $(function (){
 	                var arry=data.data || [];
 	                if(arry.length<1) return false;
 	                var table='<table>';
+					var thhtml='<table><tr><th class="choose"></th><th>编号<em class="icon arrow-s"></em></th><th>地区</th><th>树种</th></tr></table>';
 	                for(var i=0;i<arry.length;i++){
 	                    var NO=arry[i].NO || "树木编号";
 	                    var treeAdress=arry[i].town || "-";
 	                    var treeName=arry[i].tree_seed || "-";
 	                    var lng=arry[i].X || 0;
 	                    var lat=arry[i].Y || 0;
-	                    table+='<tr lng="'+lng+'" lat="'+lat+'" postnum="'+postNum+'" type="'+treeName+'" address="'+treeAdress+'">'+
+	                    table+='<tr lng="'+lng+'" lat="'+lat+'" treeno="'+NO+'" type="'+treeName+'" address="'+treeAdress+'"><td class="choose"></td><td class="choose"></td>'+
 	                               '<td>'+NO+'</td>'+
 	                               '<td>'+treeAdress+'</td>'+
 	                               '<td>'+treeName+'</td>'
@@ -278,25 +311,111 @@ $(function (){
 						var number=t.attr("page");
 						loadSearchData({page_index:number});						
 					});
-	                searchList.show().find(".autoscroll").empty().html(table);
+	                searchList.show().find(".copytable").html(thhtml).find(".autoscroll").empty().html(table);
 					searchList.find(".autoscroll").find("tr").eq(0).find("td").each(function (i,ele){
                         searchList.find(".copytable").find("th").eq(i).width($(ele).width());
                      }); 
 	            }else{
-					var errormsg=data.error || '加载新增古树出错，请您重试'
-						dialogMessage("古树信息",errormsg);
+					var errormsg=data.error || '加载新增古树出错，请您重试';
+						dialogMessage("新增古树信息",errormsg);
 				}
 			}
 
 		});
 	}
-	function submitNewTreeInfo(){
+	function init(){
+		loadNewTree();
+	}
+	init();
+	/*编辑古树之前先读取信息*/
+	function lodeTreeDetail(nubmer){
+		$.ajax({
+			"type":"get",
+			url:"/inf/getTree",
+			data:{NO:nubmer},
+			dataType:"jsonp",
+			error:function (error){
+				dialogMessage("编辑古树信息","很抱歉暂时无法编辑古树信息，请您稍后重试");
+			},
+			success:function (data){
+				if(data.status==200){
+					writeDomAdd.find(".btns-submit").attr("type","modify").html("确认修改");
+					var obj=data.data;
+					sentImgUrl=","+obj.picture;
+					var images=obj.picture.split(",");
+					var imgListhtml='';
+					for(var i=0;i<images.length;i++){
+						imgListhtml+='<div class="image"><img src="'+images[i]+'"><div class="delimg" title="删除">×</div></div>';
+					}
+					writeDomAdd.find(".uploadlist").html(imgListhtml);
+					writeDomAdd.find("input type='text'").each(function (index,ele){
+						var name=$(this).attr("name");
+						$(this).val(obj[name]);
+					});
+					writeDomAdd.show().find("select").each(function (index,ele){
+						var name=$(this).attr("name");
+						$(this).val(obj[name]);
+					});
+
+				}else{
+					var errormsg=data.error || "很抱歉暂时无法编辑古树信息，请您稍后重试";
+					dialogMessage("编辑古树信息",errormsg);
+				}
+			}
+		});
+	}
+	//提交修改
+	function submitModify(){
 		var option={picture:sentImgUrl.substr(1)};
-		$(".dialogwrite").find("input[type='text']").each(function (){
+		writeDomAdd.find("input[type='text']").each(function (){
 			var name=$(this).attr("name");
 			option[name]=$(this).val();
 		});
-		$(".dialogwrite").find("select").each(function (){
+		writeDomAdd.find("select").each(function (){
+			var name=$(this).attr("name");
+			option[name]=$(this).val();
+		});
+		console.info(option);
+		$.ajax({
+			"type":"get",
+			url:"/inf/treeModify",
+			data:option,
+			dataType:"json",
+			error:function (){},
+			success:function (data){
+				
+			}
+
+		});
+	}
+	/*删除古树*/
+	function delTreeDetail(number,delDom){
+		$.ajax({
+			"type":"get",
+			url:"/inf/treeDel",
+			data:{NO:nubmer},
+			dataType:"jsonp",
+			error:function (error){
+				dialogMessage("删除古树信息","很抱歉暂时无法删除古树信息，请您稍后重试");
+			},
+			success:function (data){
+				if(data.status==200){
+					delDom.remove();
+				}else{
+					var errormsg=data.error || "很抱歉暂时无法删除古树信息，请您稍后重试";
+					dialogMessage("删除古树信息",errormsg);
+				}
+			}
+		});
+	}
+	/*提交古树信息*/
+	function submitNewTreeInfo(){
+		var option={picture:sentImgUrl.substr(1)};
+		writeDomAdd.find("input[type='text']").each(function (){
+			var name=$(this).attr("name");
+			option[name]=$(this).val();
+		});
+		writeDomAdd.find("select").each(function (){
 			var name=$(this).attr("name");
 			option[name]=$(this).val();
 		});
@@ -317,13 +436,18 @@ manage_people:管护人
 
 		});
 	}
-	$(".btns-submit").click(function (){
-		submitNewTreeInfo();
+	writeDomAdd.find(".btns-submit").click(function (){
+		if($(this).attr("type")!="modify"){
+			submitNewTreeInfo();
+		}else{
+			submitModify();
+		}
+		
 	}).siblings(".btns-clear").click(function (){
-		$(".dialogwrite").find("input[type='text']").each(function (){
+		writeDomAdd.find("input[type='text']").each(function (){
 			$(this).val("");
 		});
-		$(".dialogwrite").find("select").each(function (){
+		writeDomAdd.find("select").each(function (){
 			$(this).val("");
 		});
 	}).siblings(".btns-cancel").click(function (){
@@ -336,7 +460,7 @@ manage_people:管护人
 			$(this).attr("load","loaded");
 			return false;
 		}
-		$(".dialogwrite").eq(1).show();
+		writeDomMap.show();
 		var map = new BMap.Map("allmap");            
 		map.centerAndZoom("昌平",12); 
 		map.enableScrollWheelZoom(true);         
@@ -362,6 +486,7 @@ manage_people:管护人
 	        map.setViewport(viewArry);
 	    });
 	});
+	
 });
 </script>
 </body>

@@ -225,7 +225,7 @@ function loadSearchData(op){
                     var treeName=arry[i].tree_seed || "-";
                     var lng=arry[i].X || 0;
                     var lat=arry[i].Y || 0;
-                    table+='<tr lng="'+lng+'" lat="'+lat+'" postnum="'+postNum+'" type="'+treeName+'" address="'+treeAdress+'">'+
+                    table+='<tr lng="'+lng+'" lat="'+lat+'" postnum="'+postNum+'" type="'+treeName+'" address="'+treeAdress+'"><td class="choose"></td>'+
                                '<td>'+NO+'</td>'+
                                '<td>'+treeAdress+'</td>'+
                                '<td>'+treeName+'</td>'

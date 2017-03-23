@@ -135,6 +135,10 @@ $(function (){
 			$(this).prependTo($(this).parents(".autoscroll").find("table"));
 		});
 	});
+	/*选中列表*/
+	$(".autoscroll").delegate("tr","click",function (){
+		$(this).addClass("active").siblings("tr").removeClass("active");
+	});
     function setWidnowSize(){
         var windowWidth=$(window).width();
         var windowHeight=$(window).height();
