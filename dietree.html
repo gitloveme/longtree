@@ -30,16 +30,19 @@
 		<div class="manage-pub">
 			<div class="manage-pub-title clear">
 				<div class="manage-pub-type manage-pub-die fl"></div>
-				<div class="form-fz fl">
+				<!-- <div class="form-fz fl">
 					<div class="bar-search">
 						<div class="icon submit-search" type=""></div>
 						<input type="text" class="searchvalue" placeholder="请输古树编号、小地名、时间查询">
 					</div>
+				</div> -->
+				<div class="manage-pub-btns fl" style="position: relative;margin:-20px 0 0 40px;">
+					<span title="新增" class="manage-btn-add icon"></span><span title="编辑" class="manage-btn-edit icon"></span><span title="删除" class="manage-btn-del icon"></span>
 				</div>
 			</div>
 			<div class="search-list manage-pub-search">
 				<div class="copytable">
-					<table>
+					<!-- <table>
 					<tr>
 						<th class="choose"></th>
 						<th>编号<em class="icon arrow-s"></em></th>
@@ -49,10 +52,10 @@
 						<th>养护单位</th>
 						<th>养护时间</th>
 					</tr>
-				</table>
+				</table> -->
 				</div>
 				<div class="autoscroll">
-					<table>
+					<!-- <table>
 					<tr>
 						<td class="choose"></td>
 						<td>111111</td>
@@ -98,13 +101,216 @@
 						<td>北京美昌然园林工程有限公司</td>
 						<td>20161224</td>
 					</tr>
-				</table>
+				</table> -->
 				</div>
+				<div class="pagenumber"></div>
 			</div>
+		</div>
+	</div>
+</div>
+<div class="dialogwrite">
+	<div class="writetree">
+		<div class="write-close">×</div>
+		<div class="write-con">
+			<ul>
+				<li>古树编号：<input type="text" name="NO" placeholder="请输古树编号"/></li>
+				<li>死亡原因：<input type="text" name="reason" placeholder="请输古树死亡原因"/></li>
+				<li>死亡时间：<input type="text" name="dead_time" placeholder="请输古树死亡时间"/></li>
+			</ul>
+			<div class="write-btns">
+				<span class="btns-submit">添加古树</span><span class="btns-clear">清空表单</span><span class="btns-cancel">取消添加</span>
+			</div>
+
 		</div>
 	</div>
 </div>
 <script src="js/jquery.js"></script>
 <script src="js/common.js"></script>
+<script>
+$(function (){
+	var searchList=$(".search-list");
+	var dialogWrite=$(".dialogwrite");
+	function modifyDiedTree(option){
+		$.ajax({
+			"type":"get",
+			url:"/inf/treeDeadModify",
+			data:option,
+			dataType:"jsonp",
+			error:function (error){
+				dialogMessage("修改古树信息","很抱歉暂时无法修改古树信息，请您稍后重试");
+			},
+			success:function (data){
+				if(data.status==200){
+					//修改成功，重新加载一次列表？
+				}else{
+					var errormsg=data.error || "很抱歉暂时无法修改古树信息，请您稍后重试";
+					dialogMessage("修改古树信息",errormsg);
+				}
+			}
+		});
+	}
+	var lodeUrl='/inf/treeDeadInf';
+	function loadDiedTreelist(op){
+		//搜索 /inf/searchTree  {page_index,page_num,keyword}
+		var option=$.extend({page_index:1,page_num:20},op);
+	    $.ajax({
+	        type:"get",
+	        url:lodeUrl,
+	        data:option,
+	        dataType:"json",
+	        error:function (error){console.error("获取信息出错")},
+	        success:function (data){
+	        	if(data.status==200){
+	        		var arry=data.data || [];
+	                if(arry.length<1) return false;
+	                var thhtml='<table><tr><th class="choose"></th><th>编号<em class="icon arrow-s"></em></th><th>死亡原因</th><th>审核备注</th><th>死亡时间</th><th>审核状态</th></tr></table>';
+	                var table='<table>';
+	                for(var i=0;i<arry.length;i++){
+	                	var treeNo=arry[i].NO || "-";
+	                	var reason=arry[i].reason || "-";
+	                	var desc=arry[i].desc || "-";
+	                	var daedTime=arry[i].dead_time || "-";
+	                	var state=arry[i].state || "-";
+	                	table+='<tr treeno="'treeNo'"><td class="choose"></td><td>'+treeNo+'</td><td>'+reason+'</td><td>'+desc+'</td><td>'+state+'</td></tr>';
+	                }
+	                searchList.find(".copytable").html(thhtml).find(".autoscroll").empty().html(table);
+					searchList.find(".autoscroll").find("tr").eq(0).find("td").each(function (i,ele){
+                        searchList.find(".copytable").find("th").eq(i).width($(ele).width());
+                     }); 
+	        		var totalcount=data.records || 0;
+	                var pagehtml=returnPagehtml(option.page_index,totalcount,option.page_num);
+					
+					searchList.find(".pagenumber").empty().html(pagehtml).delegate("a","click",function (){
+						var t=$(this);
+						if(t.hasClass("now") || t.hasClass("last")) return false;
+						var number=t.attr("page");
+						if(lodeUrl.indexOf("/inf/searchTree")!=-1){//搜索后翻页
+							var keyword=$.trim($(".searchvalue").val());
+							if(keyword==""){
+								dialogMessage("搜索","搜索内容不能为空");
+							}
+							var option={keyword:keyword,page_index:number};
+							loadDiedTreelist(option);
+						}else{
+							loadDiedTreelist({page_index:number});
+						}
+						
+					});
+	        	}else{
+					var errormsg=data.error || '加载新增古树出错，请您重试';
+					dialogMessage("新增古树信息",errormsg);
+	        	}
+	        }
+	    });
+	}
+	/*添加死亡古树*/
+	function addDiedTree(option){
+		$.ajax({
+			"type":"get",
+			url:"/inf/treeDead",
+			data:option,
+			dataType:"jsonp",
+			error:function (error){
+				dialogMessage("添加古树信息","很抱歉暂时无法添加古树信息，请您稍后重试");
+			},
+			success:function (data){
+				if(data.status==200){
+					//修改成功，重新加载一次列表？
+				}else{
+					var errormsg=data.error || "很抱歉暂时无法添加古树信息，请您稍后重试";
+					dialogMessage("添加古树信息",errormsg);
+				}
+			}
+		});
+	}
+	/*删除古树*/
+	function delTreeDetail(number,delDom){
+		$.ajax({
+			"type":"get",
+			url:"/inf/treeDel",
+			data:{NO:nubmer},
+			dataType:"jsonp",
+			error:function (error){
+				dialogMessage("删除古树信息","很抱歉暂时无法删除古树信息，请您稍后重试");
+			},
+			success:function (data){
+				if(data.status==200){
+					delDom.remove();
+				}else{
+					var errormsg=data.error || "很抱歉暂时无法删除古树信息，请您稍后重试";
+					dialogMessage("删除古树信息",errormsg);
+				}
+			}
+		});
+	}
+	/*编辑古树之前先读取信息*/
+	function lodeTreeDetail(nubmer){
+		$.ajax({
+			"type":"get",
+			url:"/inf/getTree",
+			data:{NO:nubmer},
+			dataType:"jsonp",
+			error:function (error){
+				dialogMessage("编辑古树信息","很抱歉暂时无法编辑古树信息，请您稍后重试");
+			},
+			success:function (data){
+				if(data.status==200){
+					dialogWrite.find(".btns-submit").attr("type","modify").html("确认修改");
+					var obj=data.data;
+					dialogWrite.find("input type='text'").each(function (index,ele){
+						var name=$(this).attr("name");
+						$(this).val(obj[name]);
+					});
+
+				}else{
+					var errormsg=data.error || "很抱歉暂时无法编辑古树信息，请您稍后重试";
+					dialogMessage("编辑古树信息",errormsg);
+				}
+			}
+		});
+	}
+	/*古树操作*/
+	$(".manage-btn-add").click(function (){//新增死亡古树
+		dialogWrite.find(".btns-submit").attr("type","add").html("添加古树");
+		dialogWrite.show().find("input[type='text']").each(function (){
+			$(this).val("");
+		});
+	}).siblings(".manage-btn-edit").click(function (){
+		if(searchList.find(".autoscroll").find(".active").length==0){
+			dialogMessage("编辑古树信息","请您先选中一条古树记录后再进行编辑！");
+			return false;
+		}
+		var number=searchList.find(".autoscroll").find(".active").attr("treeno");
+		lodeTreeDetail(number);
+	}).siblings(".manage-btn-del").click(function (){
+		var delDom=searchList.find(".autoscroll").find(".active");
+		if(delDom.length==0){
+			dialogMessage("删除古树信息","请您先选中一条古树记录后再进行删除！");
+			return false;
+		}
+		var number=delDom.attr("treeno");
+		delTreeDetail(number,delDom);
+	});
+	dialogWrite.find(".btns-submit").click(function (){
+		var option={};
+		dialogWrite.find("input[type='text']").each(function (i,ele){
+			var name=$(this).attr("name");
+			option[name]=$(this).val();
+		})
+		if($(this).attr("type")!="modify"){
+			modifyDiedTree(option);
+		}else{
+			addDiedTree(option);
+		}
+		
+	}).siblings(".btns-clear").click(function (){
+		dialogWrite.find("input[type='text']").each(function (){
+			$(this).val("");
+		});
+	}).siblings(".btns-cancel").click(function (){
+		$(this).parents(".dialogwrite").hide();
+	});
+});
+</script>
 </body>
 </html>
