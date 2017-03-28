@@ -13,6 +13,7 @@ $(function (){
             'echarts/chart/line'
         ],
         function (ec) {
+            //var barOption,lineOption,pieOption;
             var barOption,lineOption,pieOption;
             var typeObject={
                 "gsdj":{
