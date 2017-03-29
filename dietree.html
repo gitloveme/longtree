@@ -109,13 +109,13 @@
 	</div>
 </div>
 <div class="dialogwrite">
-	<div class="writetree">
+	<div class="writetree" style="width:300px;height:200px;top:50%;margin-top:-100px;padding:40px;">
 		<div class="write-close">×</div>
 		<div class="write-con">
 			<ul>
-				<li>古树编号：<input type="text" name="NO" placeholder="请输古树编号"/></li>
-				<li>死亡原因：<input type="text" name="reason" placeholder="请输古树死亡原因"/></li>
-				<li>死亡时间：<input type="text" name="dead_time" placeholder="请输古树死亡时间"/></li>
+				<li style="width:90%;">古树编号：<input type="text" name="NO" placeholder="请输古树编号"/></li>
+				<li style="width:90%;">死亡原因：<input type="text" name="reason" placeholder="请输古树死亡原因"/></li>
+				<li style="width:90%;">死亡时间：<input type="text" name="dead_time"  placeholder="请选择结束时间" readonly class="laydate-icon" id="laydate"/></li>
 			</ul>
 			<div class="write-btns">
 				<span class="btns-submit">添加古树</span><span class="btns-clear">清空表单</span><span class="btns-cancel">取消添加</span>
@@ -126,8 +126,22 @@
 </div>
 <script src="js/jquery.js"></script>
 <script src="js/common.js"></script>
+<script src="js/laydate/laydate.js"></script>
+
 <script>
 $(function (){
+	/*日期选择*/
+	var laydateOption = {
+		elem: '#laydate',
+		format: 'YYYY-MM-DD hh:mm:ss',
+		isclear:false,
+		min:"",
+		max:laydate.now(),
+		istime: true,
+		istoday: true
+	};
+	laydate(laydateOption);
+
 	var searchList=$(".search-list");
 	var dialogWrite=$(".dialogwrite");
 	function modifyDiedTree(option){
@@ -171,7 +185,7 @@ $(function (){
 	                	var desc=arry[i].desc || "-";
 	                	var daedTime=arry[i].dead_time || "-";
 	                	var state=arry[i].state || "-";
-	                	table+='<tr treeno="'treeNo'"><td class="choose"></td><td>'+treeNo+'</td><td>'+reason+'</td><td>'+desc+'</td><td>'+state+'</td></tr>';
+	                	table+='<tr treeno="'+treeNo+'"><td class="choose"></td><td>'+treeNo+'</td><td>'+reason+'</td><td>'+desc+'</td><td>'+state+'</td></tr>';
 	                }
 	                searchList.find(".copytable").html(thhtml).find(".autoscroll").empty().html(table);
 					searchList.find(".autoscroll").find("tr").eq(0).find("td").each(function (i,ele){
@@ -308,6 +322,9 @@ $(function (){
 			$(this).val("");
 		});
 	}).siblings(".btns-cancel").click(function (){
+		$(this).parents(".dialogwrite").hide();
+	});
+	dialogWrite.find(".write-close").click(function (){
 		$(this).parents(".dialogwrite").hide();
 	});
 });
