@@ -149,7 +149,7 @@ $(function (){
 			"type":"get",
 			url:"/inf/treeDeadModify",
 			data:option,
-			dataType:"jsonp",
+			dataType:"json",
 			error:function (error){
 				dialogMessage("修改古树信息","很抱歉暂时无法修改古树信息，请您稍后重试");
 			},
@@ -223,7 +223,7 @@ $(function (){
 			"type":"get",
 			url:"/inf/treeDead",
 			data:option,
-			dataType:"jsonp",
+			dataType:"json",
 			error:function (error){
 				dialogMessage("添加古树信息","很抱歉暂时无法添加古树信息，请您稍后重试");
 			},
@@ -243,7 +243,7 @@ $(function (){
 			"type":"get",
 			url:"/inf/treeDel",
 			data:{NO:nubmer},
-			dataType:"jsonp",
+			dataType:"json",
 			error:function (error){
 				dialogMessage("删除古树信息","很抱歉暂时无法删除古树信息，请您稍后重试");
 			},
@@ -263,7 +263,7 @@ $(function (){
 			"type":"get",
 			url:"/inf/getTree",
 			data:{NO:nubmer},
-			dataType:"jsonp",
+			dataType:"json",
 			error:function (error){
 				dialogMessage("编辑古树信息","很抱歉暂时无法编辑古树信息，请您稍后重试");
 			},

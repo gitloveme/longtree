@@ -86,7 +86,12 @@ function clearToolPloy(){
     addOverlayTree();
     moveMap();
 }
-
+var afterAddMarker=[];
+function addOverlayTree(){
+	for(var i=0;i<afterAddMarker.length;i++){
+		map.addOverlay(afterAddMarker[i]);
+	}
+}
 //拖拽地图
 function moveMap(){
     if(myDragflag==1){
@@ -121,14 +126,15 @@ function lodeTreeDetail(nubmer){
 		"type":"get",
 		url:"/inf/getTree",
 		data:{NO:nubmer},
-		dataType:"jsonp",
+		dataType:"json",
 		error:function (error){
 			dialogMessage("古树详情","很抱歉暂时无法查看古树详情，请您稍后重试");
 		},
 		success:function (data){
 			if(data.status==200){
 				var obj=data.data;
-				var images=obj.picture.split(",");
+                var imageslink=obj.picture || "";
+				var images=imageslink.split(",");
 				var windowDom=$(".window-detail");
 				var imgDom='';
 				var imglen=images.length;
@@ -155,42 +161,43 @@ function lodeTreeDetail(nubmer){
 				
 				windowDom.find(".change-box").html(imgDom);
 				
-				windowDom.find(".treeno").html("NO."+obj.NO).sibling(".treedes").find(".des-en").html(obj.small_place).siblings(".des-cn").html('<em class="icon ico-ori"></em>'+obj.product_place);
+				windowDom.find(".treeno").html("NO."+obj.NO);
+                windowDom.find(".des-en").html(obj.small_place).siblings(".des-cn").html('<em class="icon ico-ori"></em>'+obj.product_place);
 				
 				var introhtml='<ul class="clear">'+
-									'<li>原挂牌号：'+obj.quotation+'</li>'+
-									'<li>特征代码：'+obj.feature_no+'</li>'+
-									'<li>所属区县：'+obj.county+'</li>'+
-									'<li>古树等级：'+obj.grade+'</li>'+
-									'<li>树种：'+obj.tree_seed+'</li>'+
-									'<li>估测树龄：'+obj.estimation_age年+'</li>'+
-									'<li>真实树龄：'+obj.real_age年+'</li>'+
-									'<li>树高：'+obj.higth米+'</li>'+
-									'<li>胸径(主蔓径)：'+obj.chest厘米+'</li>'+
-									'<li>生长势：'+obj.growth_vigor+'</li>'+
-									'<li>生长环境：'+obj.growth_enviro+'</li>'+
-									'<li>特点：'+obj.feature+'</li>'+
+									'<li>原挂牌号：'+(obj.quotation || '--')+'</li>'+
+									'<li>特征代码：'+(obj.feature_no || '--')+'</li>'+
+									'<li>所属区县：'+(obj.county || '--')+'</li>'+
+									'<li>古树等级：'+(obj.grade || '--')+'</li>'+
+									'<li>树种：'+(obj.tree_seed || '--')+'</li>'+
+									'<li>估测树龄：'+(obj.estimation_age || '--')+'年</li>'+
+									'<li>真实树龄：'+(obj.real_age || '--')+'年</li>'+
+									'<li>树高：'+(obj.higth || '--')+'米</li>'+
+									'<li>胸径(主蔓径)：'+(obj.chest || '--')+'厘米</li>'+
+									'<li>生长势：'+(obj.growth_vigor || '--')+'</li>'+
+									'<li>生长环境：'+(obj.growth_enviro || '--')+'</li>'+
+									'<li>特点：'+(obj.feature || '--')+'</li>'+
 								'</ul>'+
 								'<div class="tree-type"><span class="before"></span><span class="tree-title">位置</span><span class="after"></span></div>'+
 								'<ul class="clear">'+
-									'<li>乡镇：'+obj.town+'</li>'+
-									'<li>村(居委会)：'+obj.villiage+'</li>'+
-									'<li>小地名：'+obj.small_place+'</li>'+
-									'<li>生长场所：'+obj.product_place+'</li>'+
-									'<li>现存状态：'+obj.exist_state+'</li>'+
-									'<li>调查号：'+obj.survey_no+'</li>'+
-									'<li>海拔：'+obj.altitude+'</li>'+
+									'<li>乡镇：'+(obj.town || '--')+'</li>'+
+									'<li>村(居委会)：'+(obj.villiage || '--')+'</li>'+
+									'<li>小地名：'+(obj.small_place || '--')+'</li>'+
+									'<li>生长场所：'+(obj.product_place || '--')+'</li>'+
+									'<li>现存状态：'+(obj.exist_state || '--')+'</li>'+
+									'<li>调查号：'+(obj.survey_no || '--')+'</li>'+
+									'<li>海拔：'+(obj.altitude || '--')+'</li>'+
 								'</ul>'+
 								'<div class="tree-type"><span class="before"></span><span class="tree-title">树冠</span><span class="after"></span></div>'+
 								'<ul class="clear">'+
-									'<li>东西树冠：'+obj.east_crown+'</li>'+
-									'<li>南北树冠：'+obj.south_crown+'</li>'+
-									'<li>平均树冠：'+obj.aver_crown+'</li>'+
+									'<li>东西树冠：'+(obj.east_crown || '--')+'</li>'+
+									'<li>南北树冠：'+(obj.south_crown || '--')+'</li>'+
+									'<li>平均树冠：'+(obj.aver_crown || '--')+'</li>'+
 								'</ul>'+
 								'<div class="tree-type"><span class="before"></span><span class="tree-title">管护</span><span class="after"></span></div>'+
 								'<ul class="clear">'+
-									'<li>管护单位：'+obj.manage_com+'</li>'+
-									'<li>管护人：'+obj.manage_people+'</li>'+
+									'<li>管护单位：'+(obj.manage_com || '--')+'</li>'+
+									'<li>管护人：'+(obj.manage_people || '--')+'</li>'+
 								'</ul>';
 				windowDom.show().find(".tree-intro").empty().html(introhtml);
 				
@@ -212,20 +219,26 @@ function loadSearchData(op){
         url:lodeUrl,
         data:option,
         dataType:"json",
-        error:function (error){console.error("获取信息出错")},
+        error:function (error){dialogMessage("古树信息","古树信息出现问题，请您重试！");},
         success:function (data){
 
 			if(data && data.status == 200){
                 var arry=data.data || [];
-                if(arry.length<1) return false;
+                if(arry.length<1){
+                    if(lodeUrl.indexOf("searchTree")!=-1){
+                        dialogMessage("古树信息","您要查询的信息不存在，请您修改查询内容之后重试！");
+                    }
+                    return false
+                };
                 var table='<table>';
+                afterAddMarker=[];
                 for(var i=0;i<arry.length;i++){
                     var NO=arry[i].NO || "树木编号";
                     var treeAdress=arry[i].town || "-";
                     var treeName=arry[i].tree_seed || "-";
                     var lng=arry[i].X || 0;
                     var lat=arry[i].Y || 0;
-                    table+='<tr lng="'+lng+'" lat="'+lat+'" postnum="'+postNum+'" type="'+treeName+'" address="'+treeAdress+'"><td class="choose"></td>'+
+                    table+='<tr lng="'+lng+'" lat="'+lat+'" postnum="'+NO+'" type="'+treeName+'" address="'+treeAdress+'"><td class="choose"></td>'+
                                '<td>'+NO+'</td>'+
                                '<td>'+treeAdress+'</td>'+
                                '<td>'+treeName+'</td>'
@@ -253,8 +266,8 @@ function loadSearchData(op){
 					var myIcon = new BMap.Icon(iconUrl, new BMap.Size(24,24));
 					var point = new BMap.Point(lng,lat);
 					var marker = new BMap.Marker(point,{icon:myIcon});
+					afterAddMarker.push(marker);
 					map.addOverlay(marker);
-					var NO=baiduData[i].NO || 0;
 					var sContent ='<div class="window" style="display:block;position:relative;"><div class="close-window">×</div>'+
 							'<img src="http://123.56.168.10/images/tree-des-1.jpg" class="treeimg" alt="'+treeName+'">'+
 							'<div class="btn-more"  number="'+NO+'">'+
@@ -272,7 +285,7 @@ function loadSearchData(op){
                 }
 				table+='</table>';
                 var totalcount=data.records || 0;
-                var pagehtml=returnPagehtml(option.page_index,totalcount,option.page_num);
+                var pagehtml=returnPagehtml(option.page_index,totalcount,option.page_num,5);
 				
 				searchList.find(".pagenumber").empty().html(pagehtml).delegate("a","click",function (){
 					var t=$(this);
@@ -282,6 +295,7 @@ function loadSearchData(op){
 						var keyword=$.trim($(".searchvalue").val());
 						if(keyword==""){
 							dialogMessage("搜索","搜索内容不能为空");
+                            return false;
 						}
 						var option={keyword:keyword,page_index:number};
 						loadSearchData(option);
@@ -339,8 +353,12 @@ function loadSearchData(op){
 						//$(".window-detail").show();
 					});
 				});
+                var trWidth=searchList.find(".autoscroll").find("table").width();
+                searchList.find(".copytable").find("table").width(trWidth);
                 searchList.find(".autoscroll").find("tr").eq(0).find("td").each(function (i,ele){
-                        searchList.find(".copytable").find("th").eq(i).width($(ele).width());
+                        var tdW=$(ele).outerWidth();
+                        console.log(tdW);
+                        searchList.find(".copytable").find("th").eq(i).width(tdW);
                      }); 
 				function addClickHandler(content,marker){
 					marker.addEventListener("click",function(e){
@@ -373,7 +391,7 @@ function loadSearchData(op){
 						});
 				}
             }else{
-				var errormsg=data.error || '登录出现错误，请您重试'
+				var errormsg=data.error || '出现未知错误，请您稍后重试！';
 					dialogMessage("古树信息",errormsg);
 			}
         }
@@ -384,11 +402,14 @@ $(".submit-search").click(function (){
 	var keyword=$.trim($(".searchvalue").val());
 	if(keyword==""){
 		dialogMessage("搜索","搜索内容不能为空");
+        return false;
 	}
 	var option={keyword:keyword};
 	loadSearchData(option);
-}).sibling(".searchvalue").keydown(function (e){
-	if(e.which===13){
+});
+$(".searchvalue").keydown(function (e){
+    var event=e || window.event;
+	if(event.which===13){
 		$(this).siblings(".submit-search").click();
 	}
 });

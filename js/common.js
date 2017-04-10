@@ -44,7 +44,12 @@ function dialogMessage(title,message,showbtn,callback){
     }
 }
 /*分页代码*/
-function returnPagehtml(num,totalcount,pagesize){
+function returnPagehtml(num,totalcount,pagesize,aLength){
+    num=parseInt(num);
+    pagesize=parseInt(pagesize);
+    var larPage=aLength || 7;//最多显示的页码数
+    console.log("num:"+num+" pagesize:"+pagesize+" larPage:"+larPage);
+
     var totalPage=Math.ceil(totalcount/pagesize);
     var isFirstpage= num==1;
     var isLastpage= num==totalPage;
@@ -52,7 +57,7 @@ function returnPagehtml(num,totalcount,pagesize){
     var nextnum=parseInt(num)+1;
     var pagehtml="";
     isFirstpage ? pagehtml+='<a href="javascript:;" class="page_prev last">上一页</a>':pagehtml+='<a href="javascript:;" title="上一页" class="page_prev" page="'+prevnum+'">上一页</a>';
-    var larPage=7;//最多显示的页码数
+    
     if(totalPage <= larPage){
         for(var i=0;i<totalPage;i++){
             var n=i+1;
@@ -101,18 +106,19 @@ function returnPagehtml(num,totalcount,pagesize){
     }
     isLastpage ? pagehtml+='<a href="javascript:;" class="page_next last">下一页</a>':pagehtml+='<a href="javascript:;" title="下一页" class="page_next" page="'+nextnum+'">下一页</a>';
     var jumpNum=num<=totalPage?num:totalPage;
-    var phtml='每页'+pagesize+'总计'+totalcount+'记录'+pagehtml+'至第<input class="jumpvalue" value="'+jumpNum+'" type="text">页 <input class="submit" value="跳转" type="button" totalpage="'+totalPage+'">';
+    //var phtml='每页'+pagesize+'总计'+totalcount+'记录'+pagehtml+'至第<input class="jumpvalue" value="'+jumpNum+'" type="text">页 <input class="submit" value="跳转" type="button" totalpage="'+totalPage+'">';
+    var phtml=pagehtml+'至第<input class="jumpvalue" value="'+jumpNum+'" type="text">页 <input class="submit" value="跳转" type="button" totalpage="'+totalPage+'">';
     //var phtml='<div class="pagenumber">总计'+totalcount+'记录'+pagehtml+'至第<input class="jumpvalue" value="'+jumpNum+'" type="text">页 <input class="submit" value="跳转" type="button" totalpage="'+totalPage+'"></div>';
     return phtml;
 }
 $(function (){
     /*判断用户是否登录/inf/isUserLogin*/
-	$.ajax({
+	/*$.ajax({
 		type:"get",
 		url:"/inf/isUserLogin",
 		data:{},
 		dataType:"json",
-		error:function (error){/*location.href="/index.html";*/},
+		error:function (error){location.href="/index.html";},
 		success:function (data){
 			data.data={"username":"用户名称","rights":"用户权限代码" };//001：管理员 ;002：添加，删除，编辑、查看;003:查看 
 
@@ -122,7 +128,7 @@ $(function (){
 				//location.href="/index.html";
 			}
 		}
-	});
+	});*/
     var commonDom=$(".commonbox");
     var commonNav=commonDom.find(".nav");
     commonNav.find("li").click(function (){
@@ -135,10 +141,10 @@ $(function (){
 			$(this).prependTo($(this).parents(".autoscroll").find("table"));
 		});
 	});
-	/*选中列表*/
-	$(".autoscroll").delegate("tr","click",function (){
-		$(this).addClass("active").siblings("tr").removeClass("active");
-	});
+    /*选中列表*/
+    $(".autoscroll").delegate("tr","click",function (){
+        $(this).addClass("active").siblings("tr").removeClass("active");
+    });
     function setWidnowSize(){
         var windowWidth=$(window).width();
         var windowHeight=$(window).height();
@@ -169,7 +175,7 @@ $(function (){
                     commonDom.find(".autoscroll").css("height",maxh)
                 break;
                 case "search":
-                    var maxh=commonDom.find(".showbox").height()*0.7;
+                    var maxh=commonDom.find(".showbox").height()*0.7-30;
                     commonDom.find(".autoscroll").css("max-height",maxh);
                     var maxs=commonDom.find(".showbox").height()*(1-0.06)-320;
                     $(".tree-intro").css("max-height",maxs);

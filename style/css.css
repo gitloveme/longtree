@@ -66,7 +66,7 @@ body{background-color:#547543;font-family:Microsoft YaHei;color:#fff; overflow: 
 .bar-search input{font-size:14px;color:#5d7e60;line-height: 60px;padding-left: 10px;width:520px; display:-webkit-flex;display: flex;}
 .submit-search{width:60px;height:60px;float:right;background-color:#537343;background-position:-244px -102px;cursor:pointer;}
 .search-list{position:relative;padding-top:38px;}
-.search-list .copytable{position:absolute;left:0;top:0;height:38px;overflow:hidden;width:100%;}
+.search-list .copytable{position:absolute;left:0;top:0;height:38px;overflow:hidden;width:100%;background-color:#d3e8d5;}
 .search-list .autoscroll{position:relative;max-height:532px;overflow:auto;}
 /*
 .search-list .copytable tr:first-child th:last-child{padding-right:3px;}
@@ -205,7 +205,7 @@ body{background-color:#547543;font-family:Microsoft YaHei;color:#fff; overflow: 
 .pagelist .on{background-color: #547543;color:#fff;cursor:default;}
 
 /*页码*/
-.pagenumber{color: #333; font-size: 14px; font-family:"Microsoft YaHei"; text-align:center; position:relative; padding-top:10px;}
+.pagenumber{color: #333; font-size: 14px; font-family:"Microsoft YaHei"; text-align:center; position:relative; padding-top:10px;background-color:#fff;}
 .pagenumber a{ color: #333; display:inline-block;height:28px;line-height: 28px; text-align: center; margin:0 2px;padding: 0 10px;background-color:#fff; font-size:14px; text-decoration: none;}
 .pagenumber a.now{background-color:#547543;color:#fff;}
 .pagenumber .page_prev,.pagenumber .page_next{ background-color:#547543;color:#fff; }
@@ -237,7 +237,7 @@ body{background-color:#547543;font-family:Microsoft YaHei;color:#fff; overflow: 
     background-color: #75af69;
 }
 /*dialog*/
-.dialog,.dialogwrite{position:absolute;left:0;top:0;width:100%;height:100%;z-index: 9;background-color:rgba(0,0,0,0.8); display: none;font-family:"Microsoft YaHei"}
+.dialog,.dialogwrite{position:absolute;left:0;top:0;width:100%;height:100%;z-index: 9;background-color:rgba(0,0,0,0.5); display: none;font-family:"Microsoft YaHei"}
 .dialog-con{background-color:#fff;width:445px;border-radius:5px;position:absolute;left:50%;top:50%;margin:-100px 0 0 -223px;padding-bottom:15px;color:#333}
 .dialog-tit{height:48px;line-height: 48px;border-bottom:1px solid #ededed;background-color: #f5f5f5;font-size:16px;padding-left: 20px;border-top-left-radius:5px;border-top-right-radius:5px;}
 .dialog-close{position:absolute;right:15px;top:5px;width: 20px;height:20px;color:#333;font-size:30px;cursor: pointer;font-family:"SimSun"}

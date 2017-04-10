@@ -83,7 +83,7 @@ $(function (){
                             for(var i=0;i<list.length;i++){
                                 barData.push(list[i].key);
                                 barValue.push(list[i].value);
-                                var pieObj={value:list[i].value, name:list[i].key},;
+                                var pieObj={value:list[i].value, name:list[i].key};
                                 pieData.push(pieObj);
                             }
                             barOption={
